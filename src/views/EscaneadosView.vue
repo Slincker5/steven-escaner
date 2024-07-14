@@ -10,7 +10,7 @@ const noEscaneados = ref([])
 const getListScan = async() => {
   try{
 
-    const { data } = await axios.get('http://localhost/api/document/list')
+    const { data } = await axios.get('https://steven.multimarcas.app/api/document/list')
     escaneados.value = data
   }catch(error){
     console.log(error)
@@ -19,7 +19,7 @@ const getListScan = async() => {
 
 const getList = async() => {
   try{
-    const { data } = await axios.get('http://localhost/api/document/productos-restantes')
+    const { data } = await axios.get('https://steven.multimarcas.app/api/document/productos-restantes')
     noEscaneados.value = data
     console.log(data)
   }catch(error){
