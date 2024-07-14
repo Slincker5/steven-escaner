@@ -26,9 +26,7 @@
   const barcode = ref(null)
   let stream;
   const show = ref(false)
-  const deviceEnable = ref(true)
   const videoNew = ref(null);
-  const result = ref(null);
   
   
   async function checkPermissionsAndStart() {
