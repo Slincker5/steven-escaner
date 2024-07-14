@@ -5,9 +5,22 @@ import { RouterLink, RouterView } from 'vue-router'
 
 <template>
   <header class="flex items-stretch justify-between"><span
-      class="p-4 py-5 w-full bg-blue-500  text-yellow-300 font-extrabold">MAXIEFECTIVO</span>
+      class="p-4 py-5 w-full bg-[#005297]  text-[#ffd107] logo">MAXIEFECTIVO</span>
   </header>
 
 
   <RouterView />
 </template>
+
+
+<style>
+@font-face {
+    font-family: 'maxiefectivo';
+    src: url('../public/maxiefectivo.ttf') format('truetype');
+}
+
+.logo {
+    font-family: 'maxiefectivo';
+}
+
+</style>

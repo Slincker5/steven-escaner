@@ -102,16 +102,13 @@ const startScannerNew = async (barcode) => {
 
 <template>
   <div class="p-4">
-    <Cargando :enviando="cargando" :textoCarga="'Cargando base de datos ..'"></Cargando>
-    <button
-      class="w-full py-2 px-3 center font-medium text-gray-700 border-2 border-dashed border-[#555] block uppercase"
-      @click="abrirModal">cargar inventario</button>
 
+    <Cargando :enviando="cargando" :textoCarga="'Cargando base de datos ..'"></Cargando>
     <Transition>
       <div class="fixed top-0 left-0 w-full h-full bg-black/40 flex items-center justify-center" v-if="modal">
         <div class="p-4 bg-white w-[90%]">
           <h2 class="font-medium mb-4 flex items-center justify-between">CARGAR INVENTARIO <button
-              class="font-extrabold" @click="cerrarModal">X</button></h2>
+              @click="cerrarModal"><font-awesome-icon :icon="['fas', 'xmark']" /></button></h2>
           <form @submit.prevent="uploadFile">
             <input type="file" name="xlsx_file" ref="fileInput">
             <input type="submit" class="bg-blue-500 block w-full mt-4 px-3 py-2 text-white font-medium"
@@ -119,8 +116,16 @@ const startScannerNew = async (barcode) => {
         </div>
       </div>
     </Transition>
-    <EscanerVainilla class="mt-4" @startScannerNew="startScannerNew">
+
+    <div class="flex item-center justify-between gap-4">
+      <button
+      class="w-full py-2 px-3 text-center font-medium text-black border border-solid border-[#000] shadow-md shadow-black/20 block uppercase center rounded-sm"
+      @click="abrirModal"><font-awesome-icon :icon="['fas', 'plus']" /> Cargar base</button>
+
+    <EscanerVainilla @startScannerNew="startScannerNew">
     </EscanerVainilla>
+    </div>
+    
     <div class="py-4 font-medium flex items-center justify-between" v-if="noEscaneados">
       <router-link to="/">NO ESCANEADOS <span class="font-medium">({{ noEscaneados.length }})</span></router-link>
       <router-link to="/escaneados">
@@ -131,10 +136,10 @@ const startScannerNew = async (barcode) => {
     <div class="md:grid md:grid-cols-3 gap-4">
 
       <div v-if="noEscaneados" v-for="articulo in noEscaneados" class="p-4 border border-solid border-[#ddd] mb-4">
-        <div class="truncate font-medium">{{ articulo.descripcion }}</div>
+        <div class="truncate font-medium"><font-awesome-icon :icon="['fas', 'tag']" /> {{ articulo.descripcion }}</div>
         <div class="py-2 text-sm">BARRA: {{ articulo.articulo }}</div>
-        <div class="flex items-center justify-between"><span class="text-sm">Costo: {{ articulo.costo }}</span> <span
-            class="text-sm">Precio: {{ articulo.precio }}</span> <span class="text-sm">Antiguedad: {{
+        <div class="flex items-center justify-between"><span class="text-sm"><b class="font-medium">Costo:</b> {{ articulo.costo }}</span> <span
+            class="text-sm"><b class="font-medium">Precio:</b> {{ articulo.precio }}</span> <span class="text-sm"><b class="font-medium">Antiguedad:</b> {{
               articulo.antiguedad }}</span></div>
       </div>
     </div>
