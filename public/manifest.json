@@ -22,7 +22,6 @@
     "description": "Inventario completo en pocos minutos.",
     "scope": "/",
     "orientation": "portrait",
-    "prefer_related_applications": false,
     "lang": "es"
   }
   
