@@ -30,9 +30,6 @@
   const videoNew = ref(null);
   const result = ref(null);
   
-  if (!('BarcodeDetector' in window)) {
-    deviceEnable.value = false
-  }
   
   async function checkPermissionsAndStart() {
     try {
@@ -56,7 +53,7 @@
     }
   
     show.value = true
-    const barcodeDetector = new BarcodeDetector({ formats: ['ean_13', 'code_128', 'ean_8', 'upc_a', 'upc_e'] });
+    const barcodeDetector = new BarcodeDetector({ formats: ['code_128'] });
   
     try {
       const constraints = {
@@ -91,7 +88,7 @@
           }
         } catch (err) {
           console.error(err);
-          result.value.textContent = 'Error al detectar el código';
+         alert('Error al detectar el código');
         }
   
         if (videoNew.value.srcObject) {
@@ -100,7 +97,7 @@
       }
     } catch (err) {
       console.error(err);
-      result.value.textContent = 'No se pudo acceder a la cámara';
+      alert('No se pudo acceder a la cámara')
     }
   }
   
