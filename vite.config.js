@@ -3,28 +3,27 @@ import vue from '@vitejs/plugin-vue'
 import { VitePWA } from 'vite-plugin-pwa'
 import { fileURLToPath, URL } from 'node:url'
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
     vue(),
     VitePWA({
       registerType: 'autoUpdate',
       manifest: {
-        name: 'My Vue PWA',
-        short_name: 'VuePWA',
-        theme_color: '#4DBA87',
-        background_color: '#000000',
+        name: 'Steven App',
+        short_name: 'Steven',
+        theme_color: '#005297',
+        background_color: '#005297',
         display: 'standalone',
         scope: '/',
         start_url: '/',
         icons: [
           {
-            src: 'img/icons/android-chrome-192x192.png',
+            src: '/android-chrome-192x192.png',
             sizes: '192x192',
             type: 'image/png'
           },
           {
-            src: 'img/icons/android-chrome-512x512.png',
+            src: '/android-chrome-512x512.png',
             sizes: '512x512',
             type: 'image/png'
           }
@@ -33,7 +32,9 @@ export default defineConfig({
       workbox: {
         skipWaiting: true,
         clientsClaim: true
-      }
+      },
+      srcDir: 'src',
+      filename: 'custom-service-worker.js'
     })
   ],
   resolve: {
@@ -41,4 +42,4 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
   }
-})
+});
