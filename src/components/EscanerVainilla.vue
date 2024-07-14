@@ -78,7 +78,7 @@
             setTimeout(() => {
               stopCamera()
               emit('startScannerNew', barcodes[0].rawValue)
-            }, 1000)
+            }, 1500)
   
           }
         } catch (err) {
