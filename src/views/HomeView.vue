@@ -86,7 +86,14 @@ const startScannerNew = async (barcode) => {
         'Content-Type': 'application/json'
       }
     })
-    alert(data.message)
+    toast.success(data.message, {
+      theme: "colored",
+      autoClose: 1500,
+      position: toast.POSITION.BOTTOM_LEFT,
+      transition: toast.TRANSITIONS.ZOOM,
+    });
+    getList()
+    getListScan()
   } catch (error) {
     console.log(error);
   }
