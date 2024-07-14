@@ -81,7 +81,7 @@ const startScannerNew = async (barcode) => {
     const dataPackage = {
       articulo: barcode
     };
-    const { data } = await axios.post('https://steven.multimarcas.app/api/document/escanear', dataPackage, {
+    const { data } = await axios.put('https://steven.multimarcas.app/api/document/escanear', dataPackage, {
       headers: {
         'Content-Type': 'application/json'
       }
