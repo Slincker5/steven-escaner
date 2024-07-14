@@ -1,5 +1,4 @@
 <template>
-
     <a class="flex items-center justify-center h-full px-4 leading-tight text-gray-700 bg-gray-300 border rounded-r"
       @click="checkPermissionsAndStart"><img src="../../public/barcode.gif"
         class="w-[45px] block" /></a>
@@ -7,7 +6,6 @@
       <div class="w-full h-full fixed z-40 bg-black top-0 left-0 flex justify-center items-center" ref="barcode"
         v-if="show">
         <div class="relative z-50 w-full">
-  
           <div class="z-50 absolute top-0 left-0 p-4 bg-black/60 flex items-center justify-between w-full">
             <a class="text-white" @click.prevent="stopCamera">X
               REGRESAR</a>
@@ -17,17 +15,15 @@
         </div>
       </div>
     </Transition>
-    
   </template>
   
   <script setup>
-  import { ref, onUnmounted } from 'vue';
+  import { ref, onUnmounted, nextTick } from 'vue';
   const emit = defineEmits(["startScannerNew"])
   const barcode = ref(null)
   let stream;
   const show = ref(false)
   const videoNew = ref(null);
-  
   
   async function checkPermissionsAndStart() {
     try {
@@ -67,8 +63,9 @@
       }
   
       stream = await navigator.mediaDevices.getUserMedia(constraints);
-      videoNew.value.srcObject = stream;
   
+      await nextTick();
+      videoNew.value.srcObject = stream;
   
       videoNew.value.addEventListener('playing', () => {
         requestAnimationFrame(scanBarcode);
@@ -86,7 +83,7 @@
           }
         } catch (err) {
           console.error(err);
-         alert('Error al detectar el código');
+          alert('Error al detectar el código');
         }
   
         if (videoNew.value.srcObject) {
@@ -111,7 +108,6 @@
   onUnmounted(() => {
     stopCamera();
   });
-  
   </script>
   
   <style>
@@ -128,3 +124,4 @@
     justify-content: center;
   }
   </style>
+  
