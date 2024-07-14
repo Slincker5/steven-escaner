@@ -106,7 +106,7 @@ const startScannerNew = async (barcode) => {
     <Cargando :enviando="cargando" :textoCarga="'Cargando base de datos ..'"></Cargando>
     <Transition>
       <div class="fixed top-0 left-0 w-full h-full bg-black/40 flex items-center justify-center" v-if="modal">
-        <div class="p-4 bg-white w-[90%]">
+        <div class="p-4 bg-white w-[90%] overflow-hidden">
           <h2 class="font-medium mb-4 flex items-center justify-between">CARGAR INVENTARIO <button
               @click="cerrarModal"><font-awesome-icon :icon="['fas', 'xmark']" /></button></h2>
           <form @submit.prevent="uploadFile">

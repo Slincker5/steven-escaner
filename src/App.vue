@@ -4,8 +4,7 @@ import { RouterLink, RouterView } from 'vue-router'
 </script>
 
 <template>
-  <header class="flex items-stretch justify-between"><span
-      class="p-4 py-5 w-full bg-[#005297]  text-[#ffd107] logo">MAXIEFECTIVO</span>
+  <header class="p-4 py-5 w-full bg-[#005297] text-[#ffd107] sticky top-0 logo">MAXIEFECTIVO
   </header>
 
 

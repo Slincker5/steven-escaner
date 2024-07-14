@@ -24,6 +24,12 @@ let stream;
 const show = ref(false)
 const videoNew = ref(null);
 
+function playSound(url) {
+  const audio = new Audio('https://steven-scan.netlify.app/beep.mp3');
+  audio.play().catch(error => {
+    console.error("Error al reproducir el sonido:", error);
+  });
+}
 async function checkPermissionsAndStart() {
   try {
     const permissionStatus = await navigator.permissions.query({ name: 'camera' });
@@ -78,6 +84,7 @@ async function initBarcodeScanner() {
         if (barcodes.length > 0) {
           setTimeout(() => {
             stopCamera();
+            playSound()
             emit('startScannerNew', barcodes[0].rawValue);
           }, 1500);
         }
