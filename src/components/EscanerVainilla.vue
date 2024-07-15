@@ -2,7 +2,7 @@
   <button class="w-full py-2 px-3 text-center font-medium text-black border border-solid border-[#000] shadow-md shadow-black/20 block uppercase rounded-sm"
     @click="checkPermissionsAndStart"><font-awesome-icon :icon="['fas', 'barcode']" /> ESCANEAR</button>
   <Transition>
-    <div class="w-full h-full fixed z-40 bg-black top-0 left-0 flex justify-center items-center" ref="barcode" v-if="show">
+    <div class="w-full h-full fixed z-50 bg-black top-0 left-0 flex justify-center items-center" ref="barcode" v-if="show">
       <div class="relative z-50 w-full">
         <div class="z-50 absolute top-0 left-0 p-4 bg-black/60 flex items-center justify-between w-full">
           <a class="text-white" @click.prevent="stopCamera">
