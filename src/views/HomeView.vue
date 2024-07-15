@@ -98,14 +98,25 @@ const startScannerNew = async (barcode) => {
         'Content-Type': 'application/json'
       }
     })
-    toast.success(data.message, {
-      theme: "colored",
-      autoClose: 1500,
-      position: toast.POSITION.BOTTOM_LEFT,
-      transition: toast.TRANSITIONS.ZOOM,
-    });
-    getList()
-    getListScan()
+
+    if (data.status === "error") {
+      toast.error(data.message, {
+        theme: "colored",
+        autoClose: 1500,
+        position: toast.POSITION.BOTTOM_LEFT,
+        transition: toast.TRANSITIONS.ZOOM,
+      });
+    } else {
+      toast.success(data.message, {
+        theme: "colored",
+        autoClose: 1500,
+        position: toast.POSITION.BOTTOM_LEFT,
+        transition: toast.TRANSITIONS.ZOOM,
+      });
+      getList()
+      getListScan()
+    }
+
   } catch (error) {
     console.log(error);
   }
