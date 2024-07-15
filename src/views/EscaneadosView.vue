@@ -51,8 +51,8 @@ getListScan()
         <span class="text-sm"><b class="font-medium">Antiguedad:</b> {{
           articulo.antiguedad }}</span></div>
     </div>
-    <div class="p-4 flex items-center justify-center h-12 font-medium" v-else>
-      No hay articulos escaneados aun 😕
+    <div class="p-4 flex items-center justify-center h-56  font-normal text-gray-700 text-lg" v-else>
+      <font-awesome-icon :icon="['fas', 'face-sad-cry']" class="text-lg inline-block mr-3" /> Sin articulos escaneados aun
     </div>
 
   </div>

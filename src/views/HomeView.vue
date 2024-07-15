@@ -10,6 +10,7 @@ import EscanerVainilla from "@/components/EscanerVainilla.vue";
 const cargando = ref(false)
 const fileInput = ref(null);
 const modal = ref(false)
+const fileName = ref('');
 
 const abrirModal = () => {
   modal.value = true
@@ -18,6 +19,15 @@ const abrirModal = () => {
 const cerrarModal = () => {
   modal.value = false
 }
+
+const selectFile = () => {
+  fileInput.value.click();
+};
+
+const handleFileChange = (event) => {
+  const file = event.target.files[0];
+  fileName.value = file ? file.name : '';
+};
 
 async function uploadFile() {
   if (!fileInput.value.files.length) return;
@@ -47,6 +57,8 @@ async function uploadFile() {
     // Maneja el error aquí
   } finally {
     cargando.value = false
+    cerrarModal()
+    getList()
   }
 }
 
@@ -105,14 +117,28 @@ const startScannerNew = async (barcode) => {
 
     <Cargando :enviando="cargando" :textoCarga="'Cargando base de datos ..'"></Cargando>
     <Transition>
-      <div class="fixed top-0 left-0 w-full h-full bg-black/40 flex items-center justify-center" v-if="modal">
-        <div class="p-4 bg-white w-[90%] overflow-hidden">
-          <h2 class="font-medium mb-4 flex items-center justify-between">CARGAR INVENTARIO <button
-              @click="cerrarModal"><font-awesome-icon :icon="['fas', 'xmark']" /></button></h2>
+      <div class="fixed top-0 left-0 w-full h-full bg-black/70 flex items-center justify-center z-40" v-if="modal">
+        <div class="p-4 bg-white w-[90%] overflow-hidden rounded-md shadow-md shadow-black/80">
+          <h2 class="font-medium mb-4 flex items-center justify-between">
+            CARGAR INVENTARIO
+            <button @click="cerrarModal">
+              <font-awesome-icon :icon="['fas', 'xmark']" />
+            </button>
+          </h2>
           <form @submit.prevent="uploadFile">
-            <input type="file" name="xlsx_file" ref="fileInput">
-            <input type="submit" class="bg-blue-500 block w-full mt-4 px-3 py-2 text-white font-medium"
-              value="CARGAR DOCUMENTO" </form>
+            <input type="file" name="xlsx_file" ref="fileInput" @change="handleFileChange" class="hidden">
+            <button type="button" @click="selectFile" class="flex items-center justify-center border-[2px] border-dashed border-[#7a7a7a] w-full h-40">
+              <div>
+                <img src="../../public/upload.png" class="w-[80px] block m-auto">
+              <span class="uppercase block pt-4 text-sm">Selecciona tu documento</span>
+              </div>
+              
+            </button>
+            <div v-if="fileName" class="mt-4 truncate">
+              <b class="font-medium">Seleccion:</b> {{ fileName }}
+            </div>
+            <input type="submit" class="bg-[#005297] block w-full mt-4 px-3 py-2 text-white font-medium" value="CARGAR DOCUMENTO">
+          </form>
         </div>
       </div>
     </Transition>
@@ -135,12 +161,15 @@ const startScannerNew = async (barcode) => {
     </div>
     <div class="md:grid md:grid-cols-3 gap-4 p-4">
 
-      <div v-if="noEscaneados" v-for="articulo in noEscaneados" class="p-4 border border-solid border-[#ddd] mb-4">
+      <div v-if="noEscaneados && noEscaneados.length > 0" v-for="articulo in noEscaneados" class="p-4 border border-solid border-[#ddd] mb-4">
         <div class="truncate font-medium"><font-awesome-icon :icon="['fas', 'tag']" /> {{ articulo.descripcion }}</div>
         <div class="py-2 text-sm">BARRA: {{ articulo.articulo }}</div>
         <div class="flex items-center justify-between"><span class="text-sm"><b class="font-medium">Costo:</b> {{ articulo.costo }}</span> <span
             class="text-sm"><b class="font-medium">Precio:</b> {{ articulo.precio }}</span> <span class="text-sm"><b class="font-medium">Antiguedad:</b> {{
               articulo.antiguedad }}</span></div>
+      </div>
+      <div class="p-4 flex items-center justify-center h-56  font-normal text-gray-700 text-lg" v-else>
+        <font-awesome-icon :icon="['fas', 'face-sad-cry']" class="text-lg inline-block mr-3" /> La base de datos esta vacia
       </div>
     </div>
 
