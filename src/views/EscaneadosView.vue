@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import axios from "axios";
 import dayjs from "dayjs";
 import "dayjs/locale/es";
+import relativeTime from "dayjs/plugin/relativeTime";
 
 dayjs.locale("es");
 dayjs.extend(relativeTime);
