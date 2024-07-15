@@ -146,7 +146,7 @@ const startScannerNew = async (barcode) => {
       </div>
     </Transition>
 
-    <div class="flex item-center justify-between gap-4 sticky top-0 left-0 bg-white/90 p-4">
+    <div class="flex item-center justify-between gap-4 sticky top-0 left-0 bg-white shadow-lg shadow-white/80 p-4">
       <button
         class="w-full py-2 px-3 text-center font-medium text-black border border-solid border-[#000] shadow-md shadow-black/20 block uppercase center rounded-sm"
         @click="abrirModal"><font-awesome-icon :icon="['fas', 'plus']" /> Cargar base</button>
