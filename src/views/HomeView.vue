@@ -126,18 +126,21 @@ const startScannerNew = async (barcode) => {
             </button>
           </h2>
           <form @submit.prevent="uploadFile">
-            <input type="file" name="xlsx_file" ref="fileInput" @change="handleFileChange" class="hidden">
-            <button type="button" @click="selectFile" class="flex items-center justify-center border-[2px] border-dashed border-[#7a7a7a] w-full h-40">
+            <input type="file" name="xlsx_file" accept=".xls, .xlsx" ref="fileInput" @change="handleFileChange"
+              class="hidden">
+            <button type="button" @click="selectFile"
+              class="flex items-center justify-center border-[2px] border-dashed border-[#7a7a7a] w-full h-40">
               <div>
                 <img src="../../public/upload.png" class="w-[80px] block m-auto">
-              <span class="uppercase block pt-4 text-sm">Selecciona tu documento</span>
+                <span class="uppercase block pt-4 text-sm">Selecciona tu documento</span>
               </div>
-              
+
             </button>
             <div v-if="fileName" class="mt-4 truncate">
               <b class="font-medium">Seleccion:</b> {{ fileName }}
             </div>
-            <input type="submit" class="bg-[#005297] block w-full mt-4 px-3 py-2 text-white font-medium" value="CARGAR DOCUMENTO">
+            <input type="submit" class="bg-[#005297] block w-full mt-4 px-3 py-2 text-white font-medium"
+              value="CARGAR DOCUMENTO">
           </form>
         </div>
       </div>
@@ -145,13 +148,13 @@ const startScannerNew = async (barcode) => {
 
     <div class="flex item-center justify-between gap-4 sticky top-0 left-0 bg-white/90 p-4">
       <button
-      class="w-full py-2 px-3 text-center font-medium text-black border border-solid border-[#000] shadow-md shadow-black/20 block uppercase center rounded-sm"
-      @click="abrirModal"><font-awesome-icon :icon="['fas', 'plus']" /> Cargar base</button>
+        class="w-full py-2 px-3 text-center font-medium text-black border border-solid border-[#000] shadow-md shadow-black/20 block uppercase center rounded-sm"
+        @click="abrirModal"><font-awesome-icon :icon="['fas', 'plus']" /> Cargar base</button>
 
-    <EscanerVainilla @startScannerNew="startScannerNew">
-    </EscanerVainilla>
+      <EscanerVainilla @startScannerNew="startScannerNew">
+      </EscanerVainilla>
     </div>
-    
+
     <div class="p-4 py-0 font-medium flex items-center justify-between" v-if="noEscaneados">
       <router-link to="/">NO ESCANEADOS <span class="font-medium">({{ noEscaneados.length }})</span></router-link>
       <router-link to="/escaneados">
@@ -161,15 +164,18 @@ const startScannerNew = async (barcode) => {
     </div>
     <div class="md:grid md:grid-cols-3 gap-4 p-4">
 
-      <div v-if="noEscaneados && noEscaneados.length > 0" v-for="articulo in noEscaneados" class="p-4 border border-solid border-[#ddd] mb-4">
+      <div v-if="noEscaneados && noEscaneados.length > 0" v-for="articulo in noEscaneados"
+        class="p-4 border border-solid border-[#ddd] mb-4">
         <div class="truncate font-medium"><font-awesome-icon :icon="['fas', 'tag']" /> {{ articulo.descripcion }}</div>
         <div class="py-2 text-sm">BARRA: {{ articulo.articulo }}</div>
-        <div class="flex items-center justify-between"><span class="text-sm"><b class="font-medium">Costo:</b> {{ articulo.costo }}</span> <span
-            class="text-sm"><b class="font-medium">Precio:</b> {{ articulo.precio }}</span> <span class="text-sm"><b class="font-medium">Antiguedad:</b> {{
+        <div class="flex items-center justify-between"><span class="text-sm"><b class="font-medium">Costo:</b> {{
+          articulo.costo }}</span> <span class="text-sm"><b class="font-medium">Precio:</b> {{ articulo.precio
+            }}</span> <span class="text-sm"><b class="font-medium">Antiguedad:</b> {{
               articulo.antiguedad }}</span></div>
       </div>
       <div class="p-4 flex items-center justify-center h-56  font-normal text-gray-700 text-lg" v-else>
-        <font-awesome-icon :icon="['fas', 'face-sad-cry']" class="text-lg inline-block mr-3" /> La base de datos esta vacia
+        <font-awesome-icon :icon="['fas', 'face-sad-cry']" class="text-lg inline-block mr-3" /> La base de datos esta
+        vacia
       </div>
     </div>
 
