@@ -61,7 +61,7 @@ async function uploadFile() {
     getList()
   }
 }
-const modalResultado = ref(true)
+const modalResultado = ref(false)
 const escaneados = ref([])
 const noEscaneados = ref([])
 const item = ref([])
