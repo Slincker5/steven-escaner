@@ -111,7 +111,7 @@ const startScannerNew = async (barcode) => {
         transition: toast.TRANSITIONS.ZOOM,
       });
     } else {
-      cerrarModalResultado.value = true
+      modalResultado.value = true
       item.value = data.articulos
       getList()
       getListScan()
