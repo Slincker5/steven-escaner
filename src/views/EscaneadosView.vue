@@ -50,7 +50,7 @@ getListScan()
       class="p-4 border border-solid border-[#ddd] mb-4">
       <div class="truncate font-medium"><font-awesome-icon :icon="['fas', 'tag']" /> {{ articulo.descripcion }}</div>
       <div class="py-2 text-sm">BARRA: {{ articulo.articulo }}</div>
-      <div class="py-2 text-sm">Escaneado: {{ dayjs(fecha).fromNow() }}</div>
+      <div class="py-2 text-sm">Escaneado: {{ dayjs(articulo.fecha).fromNow() }}</div>
       <div class="flex items-center justify-between"><span class="text-sm"><b class="font-medium">Costo:</b> {{
         articulo.costo }}</span> <span class="text-sm"><b class="font-medium">Precio:</b> {{ articulo.precio }}</span>
         <span class="text-sm"><b class="font-medium">Antiguedad:</b> {{
