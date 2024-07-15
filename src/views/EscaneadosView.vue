@@ -32,7 +32,7 @@ getListScan()
 </script>
 
 <template>
-  <div class="p-4">
+  <div class="p-4 overflow-y-auto">
 
 
     <div class="py-4 font-medium flex items-center justify-between" v-if="noEscaneados">

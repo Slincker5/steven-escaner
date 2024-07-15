@@ -101,7 +101,7 @@ const startScannerNew = async (barcode) => {
 </script>
 
 <template>
-  <div class="p-4">
+  <div class="w-full overflow-y-auto">
 
     <Cargando :enviando="cargando" :textoCarga="'Cargando base de datos ..'"></Cargando>
     <Transition>
@@ -117,7 +117,7 @@ const startScannerNew = async (barcode) => {
       </div>
     </Transition>
 
-    <div class="flex item-center justify-between gap-4">
+    <div class="flex item-center justify-between gap-4 sticky top-0 left-0 bg-white/90 p-4">
       <button
       class="w-full py-2 px-3 text-center font-medium text-black border border-solid border-[#000] shadow-md shadow-black/20 block uppercase center rounded-sm"
       @click="abrirModal"><font-awesome-icon :icon="['fas', 'plus']" /> Cargar base</button>
@@ -126,14 +126,14 @@ const startScannerNew = async (barcode) => {
     </EscanerVainilla>
     </div>
     
-    <div class="py-4 font-medium flex items-center justify-between" v-if="noEscaneados">
+    <div class="p-4 py-0 font-medium flex items-center justify-between" v-if="noEscaneados">
       <router-link to="/">NO ESCANEADOS <span class="font-medium">({{ noEscaneados.length }})</span></router-link>
       <router-link to="/escaneados">
         ESCANEADOS <span class="font-medium">({{ escaneados.length }})</span>
       </router-link>
 
     </div>
-    <div class="md:grid md:grid-cols-3 gap-4">
+    <div class="md:grid md:grid-cols-3 gap-4 p-4">
 
       <div v-if="noEscaneados" v-for="articulo in noEscaneados" class="p-4 border border-solid border-[#ddd] mb-4">
         <div class="truncate font-medium"><font-awesome-icon :icon="['fas', 'tag']" /> {{ articulo.descripcion }}</div>

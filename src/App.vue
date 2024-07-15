@@ -4,22 +4,25 @@ import { RouterLink, RouterView } from 'vue-router'
 </script>
 
 <template>
-  <header class="p-4 py-5 w-full bg-[#005297] text-[#ffd107] sticky top-0 logo">MAXIEFECTIVO
-  </header>
+  <div
+    class="grid h-full bg-white grid-rows-auto-1fr-auto fixed top-0 left-0 w-full">
+    <header class="p-4 py-5 w-full bg-[#005297] sticky top-0"><router-link class="text-[#ffd107] logo"to="/">MAXIEFECTIVO</router-link>
+    </header>
 
 
-  <RouterView />
+    <RouterView />
+  </div>
+
 </template>
 
 
 <style>
 @font-face {
-    font-family: 'maxiefectivo';
-    src: url('../public/maxiefectivo.ttf') format('truetype');
+  font-family: 'maxiefectivo';
+  src: url('../public/maxiefectivo.ttf') format('truetype');
 }
 
 .logo {
-    font-family: 'maxiefectivo';
+  font-family: 'maxiefectivo';
 }
-
 </style>
