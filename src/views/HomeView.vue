@@ -165,7 +165,7 @@ const startScannerNew = async (barcode) => {
       <EscanerVainilla @startScannerNew="startScannerNew">
       </EscanerVainilla>
     </div>
-
+{{  item }}
     <div class="p-4 py-0 font-medium flex items-center justify-between" v-if="noEscaneados">
       <router-link to="/">NO ESCANEADOS <span class="font-medium">({{ noEscaneados.length }})</span></router-link>
       <router-link to="/escaneados">
