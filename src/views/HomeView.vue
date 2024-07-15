@@ -196,7 +196,7 @@ const startScannerNew = async (barcode) => {
         {{ item[0].descripcion }}
        </div>
        <div class="px-4 pb-4">
-        <b>SKU:</b> {{ item[0].articulos }}
+        <b>SKU:</b> {{ item[0].articulo }}
        </div>
 
        <div class="p-4 pt-0">
