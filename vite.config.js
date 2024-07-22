@@ -9,8 +9,8 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       manifest: {
-        name: 'Steven App',
-        short_name: 'Steven',
+        name: 'Maxi App',
+        short_name: 'Maxi App',
         theme_color: '#005297',
         background_color: '#005297',
         display: 'standalone',

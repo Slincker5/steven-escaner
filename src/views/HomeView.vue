@@ -5,12 +5,22 @@ import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 import Cargando from "@/components/Cargando.vue";
 import EscanerVainilla from "@/components/EscanerVainilla.vue";
+import ModalSkuManual from "@/components/ModalSkuManual.vue";
 
 
 const cargando = ref(false)
 const fileInput = ref(null);
 const modal = ref(false)
+const modalSku = ref(false)
 const fileName = ref('');
+
+const abrirModalSku = () => {
+  modalSku.value = true
+}
+
+const cerrarModalSku = () => {
+  modalSku.value = false
+}
 
 const abrirModal = () => {
   modal.value = true
@@ -121,6 +131,7 @@ const startScannerNew = async (barcode) => {
     console.log(error);
   }
 };
+
 </script>
 
 <template>
@@ -157,13 +168,25 @@ const startScannerNew = async (barcode) => {
       </div>
     </Transition>
 
-    <div class="flex item-center justify-between gap-4 sticky top-0 left-0 bg-white shadow-lg shadow-white/80 p-4">
+    <ModalSkuManual :modalSku="modalSku" @getList="getList" @getListScan="getListScan" @abrirModalSku="abrirModalSku"
+      @cerrarModalSku="cerrarModalSku" @startScannerNew="startScannerNew"></ModalSkuManual>
+
+
+
+    <div
+      class="flex items-stretch w-full gap-1 p-4 overflow-x-auto bg-gray-100 whitespace-nowrap acciones border-b border-solid border-[#ddd] gap-x-4 scro">
       <button
         class="w-full py-2 px-3 text-center font-medium text-black border border-solid border-[#000] shadow-md shadow-black/20 block uppercase center rounded-sm"
         @click="abrirModal"><font-awesome-icon :icon="['fas', 'plus']" /> Cargar base</button>
 
+
       <EscanerVainilla @startScannerNew="startScannerNew">
       </EscanerVainilla>
+
+      <button
+        class="w-full py-2 px-3 text-center font-medium text-black border border-solid border-[#000] shadow-md shadow-black/20 block uppercase center rounded-sm"
+        @click="abrirModalSku()"><font-awesome-icon :icon="['fas', 'plus']" /> INGRESAR SKU</button>
+
     </div>
     <div class="p-4 py-0 font-medium flex items-center justify-between" v-if="noEscaneados">
       <router-link to="/">NO ESCANEADOS <span class="font-medium">({{ noEscaneados.length }})</span></router-link>
@@ -189,22 +212,32 @@ const startScannerNew = async (barcode) => {
       </div>
     </div>
 
-    <div class="fixed top-0 left-0 w-full h-full bg-black/70 flex items-center justify-center z-40" v-if="modalResultado">
+    <div class="fixed top-0 left-0 w-full h-full bg-black/70 flex items-center justify-center z-40"
+      v-if="modalResultado">
       <div class="bg-white w-[90%] overflow-hidden rounded-md shadow-md shadow-black/80">
-        <h2 class="text-green-500 font-medium uppercase p-4 pb-0 flex items-center justify-between">PRODUCTO ESCANEADO CON EXITO!! <button class="text-black" @click.prevent="cerrarModalResultado"><font-awesome-icon :icon="['fas', 'xmark']" /></button></h2>
-       <div class="font-medium truncate p-4">
-        {{ item[0].descripcion }}
-       </div>
-       <div class="px-4 pb-4">
-        <b>SKU:</b> {{ item[0].articulo }}
-       </div>
+        <h2 class="text-green-500 font-medium uppercase p-4 pb-0 flex items-center justify-between">PRODUCTO ESCANEADO
+          CON EXITO!! <button class="text-black" @click.prevent="cerrarModalResultado"><font-awesome-icon
+              :icon="['fas', 'xmark']" /></button></h2>
+        <div class="font-medium truncate p-4">
+          {{ item[0].descripcion }}
+        </div>
+        <div class="px-4 pb-4">
+          <b>SKU:</b> {{ item[0].articulo }}
+        </div>
 
-       <div class="p-4 pt-0">
-        <EscanerVainilla @startScannerNew="startScannerNew"></EscanerVainilla>
-       </div>
+        <div class="p-4 pt-0">
+          <EscanerVainilla @startScannerNew="startScannerNew"></EscanerVainilla>
+        </div>
       </div>
 
     </div>
   </div>
 
 </template>
+
+<style>
+.acciones::-webkit-scrollbar {
+  display: none;
+  /* Oculta la barra de desplazamiento en navegadores WebKit (como Chrome/Safari) */
+}
+</style>
