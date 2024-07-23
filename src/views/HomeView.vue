@@ -3,32 +3,6 @@
 
 <template>
   <div class="p-4 overflow-y-scroll">
-    <!--<div class="flex gap-y-4 flex-wrap justify-between items-baseline">
-
-      <router-link to="/inventario"
-        class="p-4 block border border-solid border-[#ddd]  sombra rounded-md hover:bg-gray-200 transition-all">
-        <img src="../../public/balance.png" class="w-[60px] block m-auto">
-        <span class="font-medium text-center block w-full pt-2 truncate">Precio Venta</span>
-      </router-link>
-      <router-link to="/inventario"
-        class="p-4 block border border-solid border-[#ddd]  sombra rounded-md hover:bg-gray-200 transition-all">
-        <img src="../../public/interest-rate.png" class="w-[60px] block m-auto">
-        <span class="font-medium text-center block w-full pt-2">Intereses</span>
-      </router-link>
-      <router-link to="/inventario"
-        class="p-4 block border border-solid border-[#ddd]  sombra rounded-md hover:bg-gray-200 transition-all">
-        <img src="../../public/inspection.png" class="w-[60px] block m-auto">
-        <span class="font-medium text-center block w-full pt-2">Inventario</span>
-      </router-link>
-
-
-
-      <router-link to="/inventario"
-        class="p-4 block border border-solid border-[#ddd]  sombra rounded-md hover:bg-gray-200 transition-all">
-        <img src="../../public/financial-statement.png" class="w-[60px] block m-auto">
-        <span class="font-medium text-center block w-full pt-2">Meta</span>
-      </router-link>
-    </div>-->
 
     <div class="grid gap-4">
       <div class="relative flex items-center justify-between rounded-md">
@@ -38,7 +12,7 @@
             <h2 class="text-gray-200 p-4 text-lg font-medium">Inventario</h2>
             <div class="flex items-center justify-between">
   
-              <p class="p-4 text-gray-400 pt-0 flex-1">El módulo de inventario gestiona el stock, escanea artículos y los
+              <p class="p-4 text-gray-400 pt-0 flex-1 text-sm">El módulo de inventario gestiona el stock, escanea artículos y los
                 clasifica como escaneados o no escaneados.</p>
               <div class="p-4 pt-0"><router-link to="/inventario"
                   class="text-gray-100 border border-solid border-[#ddd] px-4 py-2 rounded-sm">Continuar</router-link>
@@ -58,8 +32,8 @@
             <h2 class="text-gray-200 p-4 text-lg font-medium">Precio de Venta</h2>
             <div class="flex items-center justify-between">
   
-              <p class="p-4 text-gray-400 pt-0 flex-1">El módulo de ventas permite a los usuarios calcular y visualizar el margen de ganancias de manera precisa y eficiente.</p>
-              <div class="p-4 pt-0"><router-link to="/inventario"
+              <p class="p-4 text-gray-400 pt-0 flex-1 text-sm">El módulo de ventas permite a los usuarios calcular y visualizar el margen de ganancias de manera precisa y eficiente.</p>
+              <div class="p-4 pt-0"><router-link to="/precio-venta"
                   class="text-gray-100 border border-solid border-[#ddd] px-4 py-2 rounded-sm">Continuar</router-link>
               </div>
             </div>
@@ -78,7 +52,7 @@
             <h2 class="text-gray-200 p-4 text-lg font-medium">Calcular Intereses</h2>
             <div class="flex items-center justify-between">
   
-              <p class="p-4 text-gray-400 pt-0 flex-1">El módulo de interés calcula de manera precisa cuánto se ha acumulado en intereses según los días transcurridos.</p>
+              <p class="p-4 text-gray-400 pt-0 flex-1 text-sm">El módulo de interés calcula de manera precisa cuánto se ha acumulado en intereses según los días transcurridos.</p>
               <div class="p-4 pt-0"><router-link to="/inventario"
                   class="text-gray-100 border border-solid border-[#ddd] px-4 py-2 rounded-sm">Continuar</router-link>
               </div>
@@ -97,7 +71,7 @@
             <h2 class="text-gray-200 p-4 text-lg font-medium">Meta</h2>
             <div class="flex items-center justify-between">
   
-              <p class="p-4 text-gray-400 pt-0 flex-1">El módulo de metas calcula el ingreso necesario para alcanzar los objetivos financieros establecidos.</p>
+              <p class="p-4 text-gray-400 pt-0 flex-1 text-sm">El módulo de metas calcula el ingreso necesario para alcanzar los objetivos financieros establecidos.</p>
               <div class="p-4 pt-0"><router-link to="/inventario"
                   class="text-gray-100 border border-solid border-[#ddd] px-4 py-2 rounded-sm">Continuar</router-link>
               </div>
