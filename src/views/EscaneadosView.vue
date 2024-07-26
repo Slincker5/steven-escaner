@@ -41,7 +41,7 @@ getListScan()
 
 
     <div class="py-4 font-medium flex items-center justify-between" v-if="noEscaneados">
-      <router-link to="/">NO ESCANEADOS <span class="font-medium">({{ noEscaneados.length }})</span></router-link>
+      <router-link to="/inventario">NO ESCANEADOS <span class="font-medium">({{ noEscaneados.length }})</span></router-link>
       <router-link to="/escaneados">
         ESCANEADOS <span class="font-medium">({{ escaneados.length }})</span>
       </router-link>
