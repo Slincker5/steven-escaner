@@ -53,7 +53,7 @@
             <div class="flex items-center justify-between">
   
               <p class="p-4 text-gray-400 pt-0 flex-1 text-sm">El módulo de interés calcula de manera precisa cuánto se ha acumulado en intereses según los días transcurridos.</p>
-              <div class="p-4 pt-0"><router-link to="/inventario"
+              <div class="p-4 pt-0"><router-link to="/calcular-interes"
                   class="text-gray-100 border border-solid border-[#ddd] px-4 py-2 rounded-sm">Continuar</router-link>
               </div>
             </div>
