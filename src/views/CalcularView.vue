@@ -10,8 +10,8 @@ const resultado = ref(null)
 
 
 const interesCorriente = () => {
-    const operacion = ((capital.value*iva.value)/30) * diasTranscurridos.value
-
+    const dias = diasTranscurridos.value === "" ? 30 : diasTranscurridos.value
+    const operacion = ((capital.value*iva.value)/30) * dias
     resultado.value = {
         "interesCorriente": operacion.toFixed(2),
         "interesMoratorio": (operacion + interesMoratorio()).toFixed(2)
@@ -19,7 +19,8 @@ const interesCorriente = () => {
 }
 
 const interesMoratorio = () => {
-    const operacion = (capital.value*ivaMoratorio.value) * (diasTranscurridos.value - 30)
+    const dias = diasTranscurridos.value === "" ? 30 : diasTranscurridos.value
+    const operacion = (capital.value*ivaMoratorio.value) * (dias - 30)
     return operacion
 }
 
@@ -34,7 +35,7 @@ const reiniciar = () => {
 <template>
     <div class="overflow-y-scroll">
         <h2 class="p-4 pb-2 font-medium uppercase  flex justify-between items-center">Calcular Intereses
-            <button @click.prevent="reiniciar"><font-awesome-icon :icon="['fas', 'rotate-right']" /></button>
+            <Transition><button v-if="resultado" @click.prevent="reiniciar"><font-awesome-icon :icon="['fas', 'rotate-right']" /></button></Transition>
             
         </h2>
         <Transition>
