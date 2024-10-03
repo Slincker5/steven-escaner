@@ -215,7 +215,7 @@ const startScannerNew = async (barcode) => {
     <div class="fixed top-0 left-0 w-full h-full bg-black/70 flex items-center justify-center z-40"
       v-if="modalResultado">
       <div class="bg-white w-[90%] overflow-hidden rounded-md shadow-md shadow-black/80">
-        <h2 class="text-green-500 font-medium uppercase p-4 pb-0 flex items-center justify-between">PRODUCTO ESCANEADO
+        <h2 class="text-green-600 font-medium uppercase p-4 pb-0 flex items-center justify-between">PRODUCTO ESCANEADO
           CON EXITO!! <button class="text-black" @click.prevent="cerrarModalResultado"><font-awesome-icon
               :icon="['fas', 'xmark']" /></button></h2>
         <div class="font-medium truncate p-4">
@@ -223,6 +223,15 @@ const startScannerNew = async (barcode) => {
         </div>
         <div class="px-4 pb-4">
           <b>SKU:</b> {{ item[0].articulo }}
+        </div>
+        <div class="px-4 pb-4">
+          <b>Costo:</b> {{ item[0].costo }}
+        </div>
+        <div class="px-4 pb-4">
+          <b>Precio:</b> {{ item[0].precio }}
+        </div>
+        <div class="px-4 pb-4">
+          <b>Antiguedad:</b> {{ item[0].antiguedad }}
         </div>
 
         <div class="p-4 pt-0">

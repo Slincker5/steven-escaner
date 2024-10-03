@@ -66,6 +66,15 @@ const cerrarModalResultado = () => {
             <div class="px-4 pb-4">
                 <b>SKU:</b> {{ item[0].articulo }}
             </div>
+            <div class="px-4 pb-4">
+                <b>Costo:</b> {{ item[0].costo }}
+            </div>
+            <div class="px-4 pb-4">
+                <b>Precio:</b> {{ item[0].precio }}
+            </div>
+            <div class="px-4 pb-4">
+                <b>Antiguedad:</b> {{ item[0].antiguedad }}
+            </div>
             <div class="gap-4 p-4 pt-0 flex items-center justify-between">
                 <EscanerVainilla @startScannerNew="startScannerNew"></EscanerVainilla>
                 <button class="truncate w-full py-2 px-3 text-center font-medium text-black border border-solid border-[#000] shadow-md shadow-black/20 block uppercase center rounded-sm"
