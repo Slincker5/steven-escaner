@@ -49,8 +49,7 @@ async function uploadFiles() {
 
   try {
     const headers = {
-      Authorization: "Bearer " + token.value,
-      "Content-Type": "application/json",
+      Authorization: "Bearer " + token.value
     };
     cargando.value = true;
     const { data } = await axios.post(uploadFile, formData, { headers });
@@ -66,7 +65,7 @@ async function uploadFiles() {
 
     // Maneja la respuesta de éxito aquí
   } catch (error) {
-    console.error("Error al subir el archivo:", error);
+    console.log("Error al subir el archivo:", error);
     // Maneja el error aquí
   } finally {
     cargando.value = false;
