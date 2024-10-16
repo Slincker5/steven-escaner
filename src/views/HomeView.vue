@@ -1,8 +1,36 @@
 <script setup>
 import { ref } from 'vue'
+import axios from "axios"
+import { useGetRoutes } from "@/composables/getRoutes";
 const rol = ref(localStorage.getItem("rol"))
-const verificado = ref(localStorage.getItem("verificado"))
+
+const token = ref(localStorage.getItem("token"))
+const verificado = ref('')
 const username = ref(localStorage.getItem("username"))
+
+
+const { userProfile } = useGetRoutes();
+
+const getProfile = async() => {
+  try {
+    const headers = {
+      Authorization: "Bearer " + token.value,
+      "Content-Type": "application/json",
+    };
+
+    const { data } = await axios.get(userProfile, {
+      headers
+    })
+    verificado.value = data[0].verificado
+  }catch(error){
+    console.error(error)
+  }
+}
+getProfile()
+
+setInterval(() => {
+  getProfile()
+}, 5000)
 </script>
 
 <template>

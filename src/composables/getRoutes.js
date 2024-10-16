@@ -19,6 +19,7 @@ export const useGetRoutes = () => {
 
     // rutas de usuarios
     const userList = `${url}/api/user/list`;
+    const userProfile = `${url}/api/user/profile`;
 
     //rutas de administrador
     const approveUser = `${url}/api/admin/approve-user`;
@@ -33,7 +34,8 @@ export const useGetRoutes = () => {
       remainingProducts,
       scanner,
       userList,
-      approveUser
+      approveUser,
+      userProfile
     };
   };
   
