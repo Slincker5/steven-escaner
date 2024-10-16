@@ -29,6 +29,7 @@ const login = async () => {
       localStorage.setItem("token", data.token);
       localStorage.setItem("user_uuid", data.user_uuid);
       localStorage.setItem("username", data.username);
+      localStorage.setItem("verificado", data.verificado);
       localStorage.setItem("rol", data.rol);
       redireccionar("/");
     } else {

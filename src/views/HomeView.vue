@@ -1,17 +1,20 @@
 <script setup>
-
+import { ref } from 'vue'
+const rol = ref(localStorage.getItem("rol"))
+const verificado = ref(localStorage.getItem("verificado"))
+const username = ref(localStorage.getItem("username"))
 </script>
 
 <template>
   <div class="p-4 overflow-y-scroll">
-
+    <div class="flex items-center justify-between bg-yellow-300 text-yellow-700 text-sm p-4 mb-4" v-if="rol === 'Admin'">Panel de aprobacion <router-link to="/lista-de-aprobacion" class="border border-solid border-yellow-600 px-3 pt-1 text-sm rounded-sm">Ver lista</router-link></div>
     <div class="grid gap-4">
       <div class="relative flex items-center justify-between rounded-md">
         <div class="fade absolute top-0 left-0 z-20 w-full h-full grid rejilla rounded-md">
   
           <div class="inventario">
             <h2 class="text-gray-200 p-4 text-lg font-medium">Inventario</h2>
-            <div class="flex items-center justify-between">
+            <div class="flex items-center justify-bectween">
   
               <p class="p-4 text-gray-400 pt-0 flex-1 text-sm">El módulo de inventario gestiona el stock, escanea artículos y los
                 clasifica como escaneados o no escaneados.</p>
@@ -84,7 +87,16 @@
   
       </div>
     </div>
-  </div>
+    <div class="fixed top-0 left-0 bg-white flex items-center justify-center z-50 w-full h-full" v-if="verificado == 0">
+
+     <div class="p-6">
+      <p class="text-lg font-light text-gray-500 block mb-6">Hola usuario <b>{{ username }}</b> para empezar a usar los servicios del sistema necesitas ser aprobado  por un administrador.</p>
+      <div>
+        <a href="https://wa.link/25af5u" class="border border-solid border-black px-3 py-2 text-md rounded-md hover:bg-black hover:text-white focus:bg-black focus:text-white transition-all">Solicitar aprobacion</a>
+      </div>
+     </div> 
+    </div>
+  </div> 
 </template>
 <style>
 .sombra {

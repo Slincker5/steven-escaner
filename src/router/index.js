@@ -65,6 +65,15 @@ const router = createRouter({
         requiresAuth: false,
         title: "Registro",
       },
+    },
+    {
+      path: '/lista-de-aprobacion',
+      name: 'aprobacion',
+      component: () => import('../views/UsuariosNoAprobadosView.vue'),
+      meta: {
+        requiresAuth: true,
+        title: "Lista de aprobacion",
+      },
     }
   ]
 })

@@ -6,8 +6,8 @@ export const useGetRoutes = () => {
 
   
     // Rutas de autenticacion
-    const authLogin = `${url}/api/user/login`;
-    const authRegister = `${url}/api/user/register`;
+    const authLogin = `${url}/api/auth/login`;
+    const authRegister = `${url}/api/auth/register`;
   
     // Rutas subir archivo
     const uploadFile = `${url}/api/document/upload`;
@@ -17,6 +17,12 @@ export const useGetRoutes = () => {
     const remainingProducts = `${url}/api/document/productos-restantes`;
     const scanner = `${url}/api/document/escanear`;
 
+    // rutas de usuarios
+    const userList = `${url}/api/user/list`;
+
+    //rutas de administrador
+    const approveUser = `${url}/api/admin/approve-user`;
+
     return {
       url,
       userNoPhoto,
@@ -25,7 +31,9 @@ export const useGetRoutes = () => {
       uploadFile,
       listProducts,
       remainingProducts,
-      scanner
+      scanner,
+      userList,
+      approveUser
     };
   };
   
