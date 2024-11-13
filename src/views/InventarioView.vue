@@ -8,8 +8,10 @@ import Cargando from "@/components/Cargando.vue";
 import EscanerVainilla from "@/components/EscanerVainilla.vue";
 import ModalSkuManual from "@/components/ModalSkuManual.vue";
 
-const { uploadFile, listProducts, remainingProducts, scanner } = useGetRoutes();
+const { uploadFile, listProducts, remainingProducts, scanner, exportStatus } =
+  useGetRoutes();
 const cargando = ref(false);
+const exportando = ref(false)
 const fileInput = ref(null);
 const modal = ref(false);
 const modalSku = ref(false);
@@ -49,7 +51,7 @@ async function uploadFiles() {
 
   try {
     const headers = {
-      Authorization: "Bearer " + token.value
+      Authorization: "Bearer " + token.value,
     };
     cargando.value = true;
     const { data } = await axios.post(uploadFile, formData, { headers });
@@ -73,6 +75,49 @@ async function uploadFiles() {
     getList();
   }
 }
+const exportarEstado = async () => {
+  try {
+    const headers = {
+      Authorization: "Bearer " + token.value,
+    };
+    exportando.value = true;
+
+    // Configurar axios para recibir el archivo como blob
+    const response = await axios.post(exportStatus, null, {
+      headers,
+      responseType: "blob", // Esto permite recibir el archivo como un blob
+    });
+
+    // Crear una URL para el blob y simular la descarga
+    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const link = document.createElement("a");
+    link.href = url;
+    // Obtener la fecha y hora actual en el formato YYYY-MM-DD-HHMMSS
+    const now = new Date();
+    const formattedDate = `${now.getFullYear()}-${String(
+      now.getMonth() + 1
+    ).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}-${String(
+      now.getHours()
+    ).padStart(2, "0")}${String(now.getMinutes()).padStart(2, "0")}${String(
+      now.getSeconds()
+    ).padStart(2, "0")}`;
+
+    // Asignar el nombre del archivo para la descarga
+    link.setAttribute("download", `TRIGGER-${formattedDate}.xlsx`);
+    // Agregar el enlace al DOM y simular un clic
+    document.body.appendChild(link);
+    link.click();
+
+    // Limpiar el enlace después de la descarga
+    document.body.removeChild(link);
+  } catch (error) {
+    console.log("Error al descargar el archivo:", error);
+    // Maneja el error aquí
+  } finally {
+    exportando.value = false; // Detiene el indicador de carga
+  }
+};
+
 const modalResultado = ref(false);
 const escaneados = ref([]);
 const noEscaneados = ref([]);
@@ -146,6 +191,10 @@ const startScannerNew = async (barcode) => {
     <Cargando
       :enviando="cargando"
       :textoCarga="'Cargando base de datos ..'"
+    ></Cargando>
+    <Cargando
+      :enviando="exportando"
+      :textoCarga="'Exportando estado'"
     ></Cargando>
     <Transition>
       <div
@@ -224,6 +273,13 @@ const startScannerNew = async (barcode) => {
         @click="abrirModalSku()"
       >
         <font-awesome-icon :icon="['fas', 'plus']" /> INGRESAR SKU
+      </button>
+
+      <button
+        class="w-full py-2 px-3 text-center font-medium text-black border border-solid border-[#000] shadow-md shadow-black/20 block uppercase center rounded-sm"
+        @click="exportarEstado()"
+      >
+        <font-awesome-icon :icon="['fas', 'file-export']" /> EXPORTAR ESTADO
       </button>
     </div>
     <div

@@ -16,6 +16,7 @@ export const useGetRoutes = () => {
     const listProducts = `${url}/api/document/list`;
     const remainingProducts = `${url}/api/document/productos-restantes`;
     const scanner = `${url}/api/document/escanear`;
+    const exportStatus = `${url}/api/document/trigger`;
 
     // rutas de usuarios
     const userList = `${url}/api/user/list`;
@@ -34,6 +35,7 @@ export const useGetRoutes = () => {
       remainingProducts,
       scanner,
       userList,
+      exportStatus,
       approveUser,
       userProfile
     };
