@@ -278,6 +278,7 @@ const startScannerNew = async (barcode) => {
       <button
         class="w-full py-2 px-3 text-center font-medium text-black border border-solid border-[#000] shadow-md shadow-black/20 block uppercase center rounded-sm"
         @click="exportarEstado()"
+        v-if="noEscaneados.length !== 0 || escaneados.length !== 0"
       >
         <font-awesome-icon :icon="['fas', 'file-export']" /> EXPORTAR ESTADO
       </button>
