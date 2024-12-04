@@ -44,6 +44,7 @@ const sendSkuManual = async () => {
       });
     } else {
       emit("cerrarModalSku");
+	sku.value = sku.value.toString().slice(0, -5)
       modalResultado.value = true;
       item.value = data.articulos;
       emit("getList");
