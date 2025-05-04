@@ -20,8 +20,13 @@ const token = ref(localStorage.getItem("token"));
 const { scanner } = useGetRoutes();
 const item = ref([]);
 const modalResultado = ref(false);
-const sku = ref();
+const sku = ref("");
 const cargando = ref(false);
+
+const lastDigit = (data, inicio, fin) => {
+  return data.slice(inicio, fin)
+}
+
 
 const sendSkuManual = async () => {
   try {
@@ -44,6 +49,7 @@ const sendSkuManual = async () => {
       });
     } else {
       emit("cerrarModalSku");
+      sku.value = lastDigit(sku.value.toString(), 0, -5)
       modalResultado.value = true;
       item.value = data.articulos;
       emit("getList");
@@ -62,16 +68,9 @@ const cerrarModalResultado = () => {
 </script>
 
 <template>
-  <div
-    class="fixed top-0 left-0 w-full h-full bg-black/70 flex items-center justify-center z-40"
-    v-if="modalResultado"
-  >
-    <div
-      class="bg-white w-[90%] overflow-hidden rounded-md shadow-md shadow-black/80"
-    >
-      <h2
-        class="text-green-500 font-medium uppercase p-4 pb-0 flex items-center justify-between"
-      >
+  <div class="fixed top-0 left-0 w-full h-full bg-black/70 flex items-center justify-center z-40" v-if="modalResultado">
+    <div class="bg-white w-[90%] overflow-hidden rounded-md shadow-md shadow-black/80">
+      <h2 class="text-green-500 font-medium uppercase p-4 pb-0 flex items-center justify-between">
         PRODUCTO ESCANEADO CON EXITO!!
         <button class="text-black" @click.prevent="cerrarModalResultado">
           <font-awesome-icon :icon="['fas', 'xmark']" />
@@ -87,25 +86,16 @@ const cerrarModalResultado = () => {
       <div class="gap-4 p-4 pt-0 flex items-center justify-between">
         <button
           class="truncate w-full py-2 px-3 text-center font-medium text-black border border-solid border-[#000] shadow-md shadow-black/20 block uppercase center rounded-sm"
-          @click="emit('abrirModalSku')"
-        >
+          @click="emit('abrirModalSku')">
           <font-awesome-icon :icon="['fas', 'plus']" /> INGRESAR SKU
         </button>
       </div>
     </div>
   </div>
-  <Cargando
-    :enviando="cargando"
-    :textoCarga="'Procesando producto ..'"
-  ></Cargando>
+  <Cargando :enviando="cargando" :textoCarga="'Procesando producto ..'"></Cargando>
   <Transition>
-    <div
-      class="fixed top-0 left-0 w-full h-full bg-black/70 flex items-center justify-center z-40"
-      v-if="modalSku"
-    >
-      <div
-        class="p-4 bg-white w-[90%] overflow-hidden rounded-md shadow-md shadow-black/80"
-      >
+    <div class="fixed top-0 left-0 w-full h-full bg-black/70 flex items-center justify-center z-40" v-if="modalSku">
+      <div class="p-4 bg-white w-[90%] overflow-hidden rounded-md shadow-md shadow-black/80">
         <h2 class="font-medium mb-4 flex items-center justify-between">
           INGRESAR SKU
           <button @click.prevent="emit('cerrarModalSku')">
@@ -113,20 +103,11 @@ const cerrarModalResultado = () => {
           </button>
         </h2>
         <form @submit.prevent="sendSkuManual">
-          <input
-            type="number"
-            placeholder="Ingrese sku"
-            class="px-4 py-3 border border-solid border-[#ddd] block w-full"
-            autocomplete="off"
-            inputmode="numeric"
-            v-model="sku"
-            required
-          />
-          <input
-            type="submit"
-            class="bg-[#005297] block w-full mt-4 px-3 py-2 text-white font-medium rounded-md"
-            value="BUSCAR PRODUCTO"
-          />
+          <input type="number" placeholder="Ingrese sku"
+            class="px-4 py-3 border border-solid border-[#ddd] block w-full" autocomplete="off" inputmode="numeric"
+            v-model="sku" required />
+          <input type="submit" class="bg-[#005297] block w-full mt-4 px-3 py-2 text-white font-medium rounded-md"
+            value="BUSCAR PRODUCTO" />
         </form>
       </div>
     </div>
