@@ -74,6 +74,15 @@ const router = createRouter({
         requiresAuth: true,
         title: "Lista de aprobacion",
       },
+    },
+    {
+      path: '/api-connect',
+      name: 'aprobacion',
+      component: () => import('../views/WhatsappApiConnectView.vue'),
+      meta: {
+        requiresAuth: true,
+        title: "Conectar Whatsapp",
+      },
     }
   ]
 })

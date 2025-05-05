@@ -25,6 +25,11 @@ export const useGetRoutes = () => {
     //rutas de administrador
     const approveUser = `${url}/api/admin/approve-user`;
 
+    //rutas api whatsapp
+
+    const getQr = `${url}/api/whatsapp/get-qr`;
+    const logoutWhatsapp = `${url}/api/whatsapp/logout`;
+
     return {
       url,
       userNoPhoto,
@@ -37,7 +42,9 @@ export const useGetRoutes = () => {
       userList,
       exportStatus,
       approveUser,
-      userProfile
+      userProfile,
+      getQr,
+      logoutWhatsapp
     };
   };
   
