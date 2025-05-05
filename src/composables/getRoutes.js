@@ -29,6 +29,8 @@ export const useGetRoutes = () => {
 
     const getQr = `${url}/api/whatsapp/get-qr`;
     const logoutWhatsapp = `${url}/api/whatsapp/logout`;
+    const statusLog = `${url}/api/whatsapp/log-status`;
+    const profileInfo = `${url}/api/whatsapp/profile`;
 
     return {
       url,
@@ -44,7 +46,9 @@ export const useGetRoutes = () => {
       approveUser,
       userProfile,
       getQr,
-      logoutWhatsapp
+      logoutWhatsapp,
+      statusLog,
+      profileInfo
     };
   };
   

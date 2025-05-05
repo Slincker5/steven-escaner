@@ -83,6 +83,15 @@ const router = createRouter({
         requiresAuth: true,
         title: "Conectar Whatsapp",
       },
+    },
+    {
+      path: '/home-autowhat',
+      name: 'home-autowhat',
+      component: () => import('../views/HomeWhatsappApiView.vue'),
+      meta: {
+        requiresAuth: true,
+        title: "AutoWhats | Inicio",
+      },
     }
   ]
 })
