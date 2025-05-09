@@ -16,10 +16,10 @@ const logout = () => {
 
 <template>
   <div
-    class="grid w-full h-full bg-white grid-rows-auto-1fr-auto fixed md:static top-0 left-0 md:max-w-screen-lg m-auto"
+    class="grid w-full h-[100vh] bg-white grid-rows-auto-1fr-auto fixed top-0 left-0 right-0 md:max-w-screen-xl m-auto"
   >
     <header
-      class="p-4 py-5 w-full bg-[#005297] sticky top-0 flex items-center justify-between"
+      class="p-4 py-5 w-full bg-[#005297] flex items-center justify-between"
     >
       <router-link class="text-[#ffd107] logo" to="/">MAXIEFECTIVO</router-link>
       <button class="text-white" v-if="token" @click.prevent="logout">

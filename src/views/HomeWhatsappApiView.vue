@@ -1,71 +1,23 @@
 <script setup>
-import axios from "axios";
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { useGetRoutes } from "@/composables/getRoutes";
+import { storeMenuAutowhat } from '@/store/storeMenuAutowhat'
 import MenuAutoWhat from "@/components/menu/MenuAutoWhat.vue";
-
-const router = useRouter()
-const { profileInfo, logoutWhatsapp, statusLog, userNoPhoto } = useGetRoutes();
-const token = ref(localStorage.getItem("token"))
-
-// variables menu
-const photo = ref(false)
-const phone = ref(false)
-
-const getProfileInfo = async () => {
-    try {
-        const headers = {
-            Authorization: "Bearer " + token.value,
-        }
-        const { data } = await axios.get(profileInfo, { headers })
-        photo.value = data.avatar
-        phone.value = data.phone
-
-    } catch (error) {
-        console.error(error)
-    }
-}
-
-
-getProfileInfo()
-
-const logout = async() => {
-    try {
-        const headers = {
-      Authorization: "Bearer " + token.value,
-    }
-    const { data } = await axios.get(logoutWhatsapp, { headers })
-    if(data.success) router.push('/api-connect')
-    }catch(error){
-        console.error(error)
-    }
-}
-
-const logStatus = async () => {
-  try {
-    const headers = {
-      Authorization: "Bearer " + token.value,
-    }
-    const { data } = await axios.get(statusLog, { headers })
-    if(data.stateInstance === "authorized"){
-      router.push('/home-autowhat')
-    }
-  }catch(error){
-    console.error(error)
-  }
-}
-logStatus()
-setInterval(() => {
-logStatus()
-}, 4000)
+import MensajePersonalizado from "@/components/menu/MensajePersonalizado.vue";
+import Preview from "@/components/Preview.vue";
+const menu = storeMenuAutowhat()
 
 </script>
 <template>
     <div class="migrid">
-        <MenuAutoWhat v-if="photo && phone" :photo="photo" :phone="phone"  @logout="logout"></MenuAutoWhat>
-        <div>Contenido - {{ photo }}</div>
-        <div>Submenu</div>
+        <MenuAutoWhat></MenuAutoWhat>
+        <div>
+            <MensajePersonalizado v-if="menu.mensaje_personalizado"></MensajePersonalizado>
+            <div v-else>contenido</div>
+        </div>
+        <div class="w-[400px] bg-white">
+            <Transition>
+                <Preview v-if="menu.mensaje_personalizado"></Preview>
+            </Transition>
+        </div>
     </div>
 </template>
 <style>
