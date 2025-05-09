@@ -16,7 +16,7 @@ tiempo()
 <template>
   <div class="w-[255px] mt-6 m-auto relative">
     <!-- Imagen del celular completa con fondo incluido -->
-    <img src="@/public/mobile.png" class="w-full block relative z-10">
+    <img src="../../public/mobile.png" class="w-full block relative z-10">
 
     <!-- Mensajes encima de la pantalla -->
     <div class="absolute top-[45px] left-[14px] w-[228px] h-[460px] z-20 overflow-hidden rounded-[20px]">
