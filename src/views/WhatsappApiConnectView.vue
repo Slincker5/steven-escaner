@@ -64,9 +64,9 @@ logStatus()
   <div class="overflow-scroll">
     <div class="font-medium text-2xl md:text-3xl p-4">Iniciar sesión en WhatsApp</div>
     <div class="block md:flex items-center">
-      <div class="md:flex align-center gap-x-4 p-4">
+      <div class="md:flex align-center gap-x-6 p-4">
         <div
-          class="w-[250px] h-[250px] rounded-md border-4 border-dashed border-black flex items-center justify-center  m-auto">
+          class="w-[300px] h-[300px] rounded-md border-4 border-dashed border-black flex items-center justify-center  m-auto">
           <template v-if="mostrar">
             <button class="bg-green-600 text-white py-2 px-4 rounded-sm" @click="obtenerQr" :disabled="status">
               {{ status ? 'Generando QR...' : fallo ? 'Reintentar nuevamente' : 'Obtener QR' }}
@@ -74,18 +74,18 @@ logStatus()
           </template>
           <Transition name="zoom">
             <img v-if="!mostrar" :src="`data:image/png;base64,${qr}`"
-              class="shadow-md shadow-black/30 max-w-[240px] max-h-[240px]" />
+              class="shadow-md shadow-black/30 max-w-[300px] max-h-[300px]" />
           </Transition>
         </div>
 
         <div>
-          <h1 class="pt-4 md:pt-0 font-medium text-lg md:text-2xl">Bienvenidos a Autowhats</h1>
+          <h1 class="pt-4 md:pt-0 font-medium text-lg md:text-3xl">Bienvenidos a Autowhats</h1>
           <ul class="p-4">
-            <li class="pt-0">✅ Mensajes automatizados</li>
-            <li class="pt-4">✅ Envío de imágenes</li>
-            <li class="pt-4">✅ Envío de imágenes con texto</li>
-            <li class="pt-4">✅ Mensajes personalizados</li>
-            <li class="pt-4">✅ Cargar base de usuarios</li>
+            <li class="pt-0 text-lg">✅ Mensajes automatizados</li>
+            <li class="pt-4 text-lg">✅ Envío de imágenes</li>
+            <li class="pt-4 text-lg">✅ Envío de imágenes con texto</li>
+            <li class="pt-4 text-lg">✅ Mensajes personalizados</li>
+            <li class="pt-4 text-lg">✅ Cargar base de usuarios</li>
           </ul>
         </div>
       </div>

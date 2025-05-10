@@ -19,9 +19,9 @@ const logout = () => {
     class="grid w-full h-[100vh] bg-white grid-rows-auto-1fr-auto fixed top-0 left-0 right-0 md:max-w-screen-xl m-auto"
   >
     <header
-      class="p-4 py-5 w-full bg-[#005297] flex items-center justify-between"
+      class="p-4 py-5 w-full bg-blue-700 flex items-center justify-between"
     >
-      <router-link class="text-[#ffd107] logo" to="/">MAXIEFECTIVO</router-link>
+      <router-link class="text-[#fff] logo text-2xl" to="/">AUTOWHAT</router-link>
       <button class="text-white" v-if="token" @click.prevent="logout">
         Cerrar sesion
       </button>
@@ -32,12 +32,17 @@ const logout = () => {
 </template>
 
 <style>
-@font-face {
+/*@font-face {
   font-family: "maxiefectivo";
   src: url("../public/maxiefectivo.ttf") format("truetype");
+}*/
+
+
+@import url('https://fonts.googleapis.com/css2?family=Lilita+One&display=swap');
+.logo {
+  font-family: "Lilita One", sans-serif;
+  font-weight: 400;
+  font-style: normal;
 }
 
-.logo {
-  font-family: "maxiefectivo";
-}
 </style>

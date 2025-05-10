@@ -42,7 +42,7 @@ setInterval(() => {
                     class="w-full text-left block p-4 py-5 border-b border-solid border-[#e7e7e7] text-gray-700 text-sm hover:bg-gray-100 transition-colors"><font-awesome-icon
                         :icon="['fas', 'paper-plane']" /> Enviar mensajes</button></li>
             <li><button
-                    class="w-full text-left block p-4 py-5 border-b border-solid border-[#e7e7e7] text-gray-700 text-sm hover:bg-gray-100 transition-colors"
+                    class="w-full text-left block p-4 py-5 border-b border-solid border-[#e7e7e7] transition-colors" :class="menu.mensaje_personalizado ? 'bg-gray-400 text-gray-100 text-sm hover:bg-gray-500' : 'bg-white text-gray-700 text-sm hover:bg-gray-100'"
                     @click="menu.cambiarMensajePersonalizado(true)"><font-awesome-icon :icon="['fas', 'file-pen']" />
                     Mensajes personalizados</button></li>
             <li><button
