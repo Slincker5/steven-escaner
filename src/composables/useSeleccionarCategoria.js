@@ -19,10 +19,11 @@ const toggleOpciones = () => {
     mostrarOpciones.value = !mostrarOpciones.value
 }
 
-const seleccionarOpcion = (opcion) => {
+const seleccionarOpcion = (opcion, uuid) => {
     categoria.modificarSeleccionCategoria(opcion)
     mostrarOpciones.value = false
     categoria.modificarCategoriaErrorSeleccion(true)
+    categoria.modificarCategoriaUuid(uuid)
 }
 
 const listadoCategoria = async () => {

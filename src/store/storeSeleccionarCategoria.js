@@ -6,6 +6,7 @@ export const storeSeleccionarCategoria = defineStore(
   () => {
     const categoriaSeleccionada = ref("Selecciona categoria");
     const categoriaErrorSeleccion = ref(true);
+    const categoriaUuid = ref(null)
     const listadoDeCategorias = ref([]);
 
     const modificarSeleccionCategoria = (n) => {
@@ -20,6 +21,9 @@ export const storeSeleccionarCategoria = defineStore(
       categoriaErrorSeleccion.value = n;
     };
 
+    const modificarCategoriaUuid = (n) => {
+      categoriaUuid.value = n
+    }
     return {
       categoriaSeleccionada,
       modificarSeleccionCategoria,
@@ -27,6 +31,8 @@ export const storeSeleccionarCategoria = defineStore(
       modificarListadoCategorias,
       categoriaErrorSeleccion,
       modificarCategoriaErrorSeleccion,
+      categoriaUuid,
+      modificarCategoriaUuid
     };
   }
 );

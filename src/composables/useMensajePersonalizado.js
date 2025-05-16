@@ -7,7 +7,7 @@ import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 
 const storeCategoria = storeSeleccionarCategoria();
-const { categoriaSeleccionada } = storeToRefs(storeCategoria);
+const { categoriaSeleccionada, categoriaUuid } = storeToRefs(storeCategoria);
 
 const { createMesagge, listMessagge } = useGetRoutes();
 const token = ref(localStorage.getItem("token"));
@@ -19,7 +19,7 @@ export const useMensajePersonalizado = () => {
     try {
       const dataMensaje = {
         mensaje: sms.value,
-        categoria: "",
+        categoria: categoriaUuid.value,
       };
       if (sms.value === "") {
         toast.warn("El campo mensaje no puede estar vacio", {

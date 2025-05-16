@@ -22,7 +22,7 @@ const { mostrarOpciones, toggleOpciones, seleccionarOpcion
         <nav v-show="mostrarOpciones"
             :class="['absolute left-0 mt-2 w-48 h-44 overflow-y-scroll bg-white border border-gray-300 rounded-md shadow-lg z-30 uppercase noscroll', mostrarOpciones ? 'bounce-in' : '']">
             <ul v-for="item in listadoDeCategorias">
-                <li @click.prevent="seleccionarOpcion(item.titulo)"
+                <li @click.prevent="seleccionarOpcion(item.titulo, item.uuid)"
                     class="text-ellipsis text-nowrap overflow-hidden px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm">
                     <font-awesome-icon :icon="['fas', 'tag']" /> {{ item.titulo }}
                 </li>
