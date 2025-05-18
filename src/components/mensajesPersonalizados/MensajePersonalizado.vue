@@ -1,6 +1,8 @@
 <script setup>
 import CrearCategoria from "@/components/mensajesPersonalizados/CrearCategoria.vue";
 import SeleccionarCategoria from "@/components/mensajesPersonalizados/SeleccionarCategoria.vue";
+
+import emoji  from "@/components/emoji.vue";
 import { storeMensajePersonalizado } from "@/store/storeMensajePersonalizado";
 import { useMensajePersonalizado } from "@/composables/useMensajePersonalizado";
 import { ref } from 'vue'
@@ -34,5 +36,7 @@ const {
         <SeleccionarCategoria></SeleccionarCategoria>
       </div>
     </form>
+    
+    <emoji></emoji>
   </div>
 </template>

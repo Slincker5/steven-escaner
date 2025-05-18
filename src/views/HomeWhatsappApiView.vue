@@ -4,7 +4,32 @@ import MenuAutoWhat from "@/components/menu/MenuAutoWhat.vue";
 import MensajePersonalizado from "@/components/mensajesPersonalizados/MensajePersonalizado.vue";
 import Preview from "@/components/Preview.vue";
 const menu = storeMenuAutowhat()
+const cargarEmojisPorCategoria = async () => {
+  const res = await fetch("https://cdn.jsdelivr.net/npm/emojibase-data@latest/en/data.json");
+  const emojis = await res.json();
 
+  // Agrupamos por categoría (grupo)
+  const agrupados = {};
+
+  emojis.forEach((emoji) => {
+    const grupo = emoji.group || "Unknown";
+
+    if (!agrupados[grupo]) {
+      agrupados[grupo] = [];
+    }
+
+    agrupados[grupo].push({
+      emoji: emoji.emoji,
+      label: emoji.label,
+      unicode: emoji.hexcode,
+    });
+  });
+
+  console.log(agrupados);
+  return agrupados;
+};
+
+cargarEmojisPorCategoria()
 </script>
 <template>
     <div class="migrid">
