@@ -19,11 +19,9 @@ export const storeMensajePersonalizado = defineStore(
     };
 
     const abrirCrearCategoria = () => {
-      console.log(categoriaExistencia.value);
       cambiarEstadoCategoria(true);
     };
     const cerrarCrearCategoria = () => {
-      console.log(categoriaExistencia.value);
       cambiarEstadoCategoria(false);
     };
 
@@ -41,12 +39,9 @@ export const storeMensajePersonalizado = defineStore(
         if (data.length > 0) {
           cambiarEstadoCategoria(false);
           editarExistenciaCategoria(true)
-          console.log(categoriaExistencia.value);
         } else {
           cambiarEstadoCategoria(true);
           editarExistenciaCategoria(false)
-
-          console.log(categoriaExistencia.value);
         }
       } catch (error) {
         console.error(error);

@@ -5,63 +5,55 @@ import { useGetRoutes } from "@/composables/getRoutes";
 import { storeMenuAutowhat } from "@/store/storeMenuAutowhat";
 
 const { profileInfo, logoutWhatsapp, statusLog } = useGetRoutes();
-const menu = storeMenuAutowhat();
 
 export const useMenuAutowhat = () => {
   const router = useRouter();
   const token = ref(localStorage.getItem("token"));
 
-  // variables menu
-  const photo = ref(false);
-  const phone = ref(false);
+let nombre = ref(false)
+let numero = ref(false)
+let photo = ref(false)
+let log = ref(false)
 
-  const getProfileInfo = async () => {
+const getInfo = async () => {
     try {
-      const headers = {
-        Authorization: "Bearer " + token.value,
-      };
-      const { data } = await axios.get(profileInfo, { headers });
-      photo.value = data.avatar;
-      phone.value = data.phone;
-    } catch (error) {
-      console.error(error);
+        const { data } = await axios.get("https://api.autowat.site/me")
+        numero.value = data.data.number
+        nombre.value = data.data.name
+    } catch(error){
+        console.log(error)
     }
-  };
+}
 
-  const logout = async () => {
+const getPhoto = async () => {
     try {
-      menu.modifySesion(true);
-      const headers = {
-        Authorization: "Bearer " + token.value,
-      };
-      const { data } = await axios.get(logoutWhatsapp, { headers });
-      if (data.success) router.push("/api-connect");
-    } catch (error) {
-      console.error(error);
+        const { data } = await axios.get("https://api.autowat.site/me/photo")
+        photo.value = data.data.url
+    } catch(error){
+        console.log(error)
+    }
+}
+
+const logout = async () => {
+    try {
+      log.value = true
+        const { data } = await axios.post("https://api.autowat.site/session/force-logout",{})
+        
+    } catch(error){
+        console.log(error)
     } finally {
-      menu.modifySesion(false);
+      log.value = false
+      router.push("/api-connect")
     }
-  };
-console.log(menu.sesion)
-  const logStatus = async () => {
-    try {
-      const headers = {
-        Authorization: "Bearer " + token.value,
-      };
-      const { data } = await axios.get(statusLog, { headers });
-      if (data && data.stateInstance === "authorized") {
-        router.push("/home-autowhat");
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
+}
 
   return {
     photo,
-    phone,
-    getProfileInfo,
+    numero,
+    nombre,
+    getInfo,
+    getPhoto,
     logout,
-    logStatus,
+    log
   };
 };

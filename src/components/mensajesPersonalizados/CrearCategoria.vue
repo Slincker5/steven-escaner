@@ -18,8 +18,7 @@ mensaje.listaCategoria()
         <div class="bg-white w-[60%] p-4 shadow-sm shadow-black/50 rounded-md">
             <h2 class="text-gray-900 font-medium text-lg pb-4 flex items-center justify-between">
                 Crear Categoria
-                <button v-if="categoriaExistencia" @click="mensaje.cerrarCrearCategoria"><font-awesome-icon
-                        :icon="['fas', 'xmark']" /></button>
+                <button v-if="categoriaExistencia" @click="mensaje.cerrarCrearCategoria"><i class="fa-jelly-duo fa-regular fa-xmark"></i></button>
             </h2>
             <form>
                 <input type="text"

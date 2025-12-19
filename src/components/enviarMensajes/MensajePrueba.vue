@@ -1,0 +1,93 @@
+<script setup>
+import axios from "axios";
+import { ref, Transition } from "vue";
+import { storeEnvioAutomatizado } from "@/store/storeEnvioAutomatizado";
+const envioStore = storeEnvioAutomatizado();
+
+const API_HTTP = "https://api.autowat.site";
+const numero = ref("503");
+const sendTest = ref(false);
+const enviar = async () => {
+  try {
+    const ruta = envioStore.packageMessage?.imageUrl
+      ? "/messages/media"
+      : "/messages";
+
+    envioStore.packageMessage.number = numero.value;
+    envioStore.packageMessage.caption = envioStore.modalSms;
+    envioStore.packageMessage.message = envioStore.modalSms;
+    const { data } = await axios.post(
+      `${API_HTTP}${ruta}`,
+      envioStore.packageMessage
+    );
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const enviarConPromesa = () => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(enviar());
+    }, 7000);
+  });
+};
+
+const sendMessage = async () => {
+  try {
+    sendTest.value = true;
+    const mensaje = await enviarConPromesa();
+    console.log(mensaje);
+  } catch (error) {
+    console.log(error);
+  } finally {
+    sendTest.value = false;
+  }
+};
+</script>
+<template>
+  <div
+    class="fixed w-full h-full bg-black/10 top-0 left-0 flex justify-center items-center z-50"
+    v-if="envioStore.openModalTest"
+  >
+    <div
+      class="bg-white w-96 p-4 shadow-md shadow-black/50 rounded-md relative"
+    >
+      <Transition name="zoom">
+        <div
+          class="left-0 top-0 absolute w-full h-full bg-blue-500 flex items-center justify-center text-white font-medium text-xl"
+          v-if="sendTest"
+        >
+          <i
+            class="fa-duotone fa-solid fa-spinner-third fa-spin mr-2 text-xl"
+          ></i>
+          Enviando
+        </div>
+      </Transition>
+      <h1
+        class="font-medium text-gray-900 mb-4 flex items-center justify-between"
+      >
+        <span
+          ><i class="fa-jelly fa-regular fa-phone"></i> Envio de prueba</span
+        >
+        <button @click="envioStore.changeStateModalTest(false)">
+          <i class="fa-jelly fa-regular fa-xmark"></i>
+        </button>
+      </h1>
+      <input
+        class="p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
+        placeholder="Numero de prueba"
+        v-model="numero"
+      />
+      <div class="flex items-center justify-end mt-4">
+        <button
+          class="bg-gray-600 hover:bg-gray-500 px-4 py-2 rounded-sm shadow-md text-white text-sm"
+          @click="sendMessage"
+        >
+          Enviar mensaje
+        </button>
+      </div>
+    </div>
+  </div>
+</template>

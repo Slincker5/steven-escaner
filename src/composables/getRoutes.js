@@ -1,6 +1,7 @@
 export const useGetRoutes = () => {
   // Ruta global
   const url = `https://steven.multimarcas.app`;
+  const url_autowat = `https://api.autowat.site`;
   //const url = `http://localhost`;
   const userNoPhoto = "https://cintillos-plazamundo.netlify.app/usuario.png";
 
@@ -41,6 +42,14 @@ export const useGetRoutes = () => {
   const createCategory = `${url}/api/category/new`;
   const listCategory = `${url}/api/category/list`;
 
+  // mensajes personalizados
+
+  const listMessaggePersonalized = `${url}/api/messages/list`;
+
+  // subir archivos
+
+  const uploadFileMessage = `${url}/api/files/upload`;
+
   return {
     url,
     userNoPhoto,
@@ -61,6 +70,8 @@ export const useGetRoutes = () => {
     createMesagge,
     listMessagge,
     createCategory,
-    listCategory
+    listCategory,
+    listMessaggePersonalized,
+    uploadFileMessage,
   };
 };

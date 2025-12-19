@@ -23,7 +23,7 @@ const logout = () => {
     >
       <router-link class="text-[#fff] logo text-2xl" to="/">AUTOWHAT</router-link>
       <button class="text-white" v-if="token" @click.prevent="logout">
-        Cerrar sesion
+        <i class="fa-jelly-duo fa-regular fa-arrow-right-to-bracket"></i> Salir
       </button>
     </header>
 

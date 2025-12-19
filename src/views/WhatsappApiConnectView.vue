@@ -1,62 +1,30 @@
 <script setup>
 import { ref } from "vue";
-import axios from "axios";
 import { useRouter } from 'vue-router'
-import { useGetRoutes } from "@/composables/getRoutes";
-
 const router = useRouter()
-const { getQr, statusLog } = useGetRoutes();
 
-const token = ref(localStorage.getItem("token"))
+const mostrar = ref(true)
 const qr = ref(false)
 const status = ref(false)
-const mostrar = ref(true)
-const fallo = ref(null)
-const obtenerQr = async () => {
-  try {
-    status.value = true
-    const headers = {
-      Authorization: "Bearer " + token.value,
-    }
-    const { data } = await axios.get(getQr, { headers })
-    if (data.success === true) {
-      mostrar.value = false
-      renovarQr()
-    }
-    if (data.success === false) fallo.value = true
-    qr.value = data.qr_base64
-  } catch (error) {
-    console.error(error)
-  } finally {
-    status.value = false
-  }
-}
 
-const renovarQr = () => {
-  setTimeout(() => {
-    mostrar.value = true
-  }, 45000)
-}
-
-const logStatus = async () => {
-  try {
-    const headers = {
-      Authorization: "Bearer " + token.value,
+const connect = () => {
+  const ws = new WebSocket('wss://api.autowat.site/ws');
+  ws.onopen
+  ws.onmessage = (ev) => {
+    mostrar.value = false
+    let data = JSON.parse(ev.data)
+    if(data.data.status === "waiting"){
+      qr.value = data.data.qr_png_base64
     }
-    const { data } = await axios.get(statusLog, { headers })
-    if(data.stateInstance === "authorized"){
+    if(data.data.status === "connected"){
       router.push('/home-autowhat')
     }
-  }catch(error){
-    console.error(error)
+     
   }
+  ws.onclose = () => setTimeout(connect, 1500); // reintenta en 1.5s
+  ws.onerror = () => ws.close();
 }
-
-logStatus()
-setInterval(() => {
-logStatus()
-}, 4000)
-
+connect();
 
 </script>
 
@@ -67,13 +35,9 @@ logStatus()
       <div class="md:flex align-center gap-x-6 p-4">
         <div
           class="w-[300px] h-[300px] rounded-md border-4 border-dashed border-black flex items-center justify-center  m-auto">
-          <template v-if="mostrar">
-            <button class="bg-green-600 text-white py-2 px-4 rounded-sm" @click="obtenerQr" :disabled="status">
-              {{ status ? 'Generando QR...' : fallo ? 'Reintentar nuevamente' : 'Obtener QR' }}
-            </button>
-          </template>
+          
           <Transition name="zoom">
-            <img v-if="!mostrar" :src="`data:image/png;base64,${qr}`"
+            <img v-if="!mostrar" :src="`${qr}`"
               class="shadow-md shadow-black/30 max-w-[300px] max-h-[300px]" />
           </Transition>
         </div>
@@ -81,6 +45,7 @@ logStatus()
         <div>
           <h1 class="pt-4 md:pt-0 font-medium text-lg md:text-3xl">Bienvenidos a Autowhats</h1>
           <ul class="p-4">
+            {{  status }}
             <li class="pt-0 text-lg">✅ Mensajes automatizados</li>
             <li class="pt-4 text-lg">✅ Envío de imágenes</li>
             <li class="pt-4 text-lg">✅ Envío de imágenes con texto</li>
