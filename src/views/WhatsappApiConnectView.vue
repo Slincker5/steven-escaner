@@ -1,4 +1,5 @@
 <script setup>
+import axios from "axios";
 import { ref } from "vue";
 import { useRouter } from 'vue-router'
 const router = useRouter()
@@ -7,25 +8,22 @@ const mostrar = ref(true)
 const qr = ref(false)
 const status = ref(false)
 
-const connect = () => {
-  const ws = new WebSocket('wss://api.autowat.site/ws');
-  ws.onopen
-  ws.onmessage = (ev) => {
-    mostrar.value = false
-    let data = JSON.parse(ev.data)
-    if(data.data.status === "waiting"){
-      qr.value = data.data.qr_png_base64
-    }
-    if(data.data.status === "connected"){
+const connect = async() => {
+  try {
+    const { data } = await axios.get("https://auto.autowat.site/auth")
+    console.log(data.imagenQr)
+    qr.value = data.imagenQr
+    if(data.autenticado === true){
       router.push('/home-autowhat')
     }
-     
+  }catch(error){
+    console.log(error)
   }
-  ws.onclose = () => setTimeout(connect, 1500); // reintenta en 1.5s
-  ws.onerror = () => ws.close();
 }
-connect();
 
+setInterval(() => {
+  connect()
+}, 3000);
 </script>
 
 <template>
@@ -37,7 +35,7 @@ connect();
           class="w-[300px] h-[300px] rounded-md border-4 border-dashed border-black flex items-center justify-center  m-auto">
           
           <Transition name="zoom">
-            <img v-if="!mostrar" :src="`${qr}`"
+            <img :src="`${qr}`"
               class="shadow-md shadow-black/30 max-w-[300px] max-h-[300px]" />
           </Transition>
         </div>

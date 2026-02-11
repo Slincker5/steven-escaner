@@ -11,21 +11,25 @@ export const storeEnvioWorker = defineStore("EnvioWorker", () => {
   // Estado principal
 
   const token = ref(localStorage.getItem("token"));
-  const API_HTTP = "https://api.autowat.site";
+  const API_HTTP = "https://auto.autowat.site";
 
   // funciones del store
   const enviar = async (numero) => {
     try {
       const ruta = envioStore.packageMessage?.imageUrl
         ? "/messages/media"
-        : "/messages";
+        : "/message";
 
+      const dataN = {
+        numero: numero,
+        mensaje: envioStore.modalSms
+      }
       envioStore.packageMessage.number = numero;
       envioStore.packageMessage.caption = envioStore.modalSms;
       envioStore.packageMessage.message = envioStore.modalSms;
       const { data } = await axios.post(
         `${API_HTTP}${ruta}`,
-        envioStore.packageMessage
+        dataN
       );
       return {
         info: data,

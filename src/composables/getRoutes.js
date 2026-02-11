@@ -34,7 +34,7 @@ export const useGetRoutes = () => {
 
   // mensajes personalizados
 
-  const createMesagge = `${url}/api/messages/new`;
+  const createMesagge = `$${url}/api/messages/new`;
   const listMessagge = `${url}/api/messages/list`;
 
   // crear categorias

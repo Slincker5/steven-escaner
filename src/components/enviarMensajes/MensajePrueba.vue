@@ -4,21 +4,25 @@ import { ref, Transition } from "vue";
 import { storeEnvioAutomatizado } from "@/store/storeEnvioAutomatizado";
 const envioStore = storeEnvioAutomatizado();
 
-const API_HTTP = "https://api.autowat.site";
+const API_HTTP = "https://auto.autowat.site";
 const numero = ref("503");
 const sendTest = ref(false);
 const enviar = async () => {
   try {
     const ruta = envioStore.packageMessage?.imageUrl
       ? "/messages/media"
-      : "/messages";
+      : "/message/send";
 
     envioStore.packageMessage.number = numero.value;
     envioStore.packageMessage.caption = envioStore.modalSms;
     envioStore.packageMessage.message = envioStore.modalSms;
+    const datosN = {
+      numero: numero.value,
+      mensaje: envioStore.modalSms
+    }
     const { data } = await axios.post(
       `${API_HTTP}${ruta}`,
-      envioStore.packageMessage
+      datosN
     );
     return data;
   } catch (error) {
@@ -30,7 +34,7 @@ const enviarConPromesa = () => {
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve(enviar());
-    }, 7000);
+    }, 30000);
   });
 };
 

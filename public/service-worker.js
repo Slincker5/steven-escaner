@@ -54,9 +54,9 @@ const procesarLote = async () => {
 
   for (const cliente of clientes) {
     try {
-      const ruta = tieneImagen ? "/messages/media" : "/messages";
+      const ruta = tieneImagen ? "/messages/media" : "/message/send";
       const body = {
-        number: cliente.numero,
+        numero: cliente.numero,
         message: mensaje,
         caption: mensaje,
         imageUrl: tieneImagen,

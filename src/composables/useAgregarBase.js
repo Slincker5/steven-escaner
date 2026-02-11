@@ -106,7 +106,6 @@ export const useAgregarBase = () => {
 
   const subirBaseAlServidor = async () => {
     try {
-      eliminarBase()
       baseCargada.base.forEach((item) => {
         const dataPackage = {
           cliente: item.CLIENTE,
@@ -120,7 +119,6 @@ export const useAgregarBase = () => {
           { headers }
         );
         getBase();
-        validarWhatsapp.verificarNumeros(true);
       });
     } catch (error) {
       console.log(error);
