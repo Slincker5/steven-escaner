@@ -46,7 +46,7 @@ const sendMessage = async (numero, mensaje) => {
 
 const enviar = async () => {
   for (const item of baseCargada.base) {
-    await sendMessage(item.numero, item.mensaje)
+    await sendMessage(item.numero, envioStore.mensaje)
   }
 };
 
