@@ -9,20 +9,16 @@ const numero = ref("503");
 const sendTest = ref(false);
 const enviar = async () => {
   try {
+
     const ruta = envioStore.packageMessage?.imageUrl
-      ? "/messages/media"
+      ? "/message/media"
       : "/message/send";
 
-    envioStore.packageMessage.number = numero.value;
-    envioStore.packageMessage.caption = envioStore.modalSms;
-    envioStore.packageMessage.message = envioStore.modalSms;
-    const datosN = {
-      numero: numero.value,
-      mensaje: envioStore.modalSms
-    }
+    envioStore.packageMessage.numero = numero.value;
+    envioStore.packageMessage.mensaje = envioStore.mensaje;
     const { data } = await axios.post(
       `${API_HTTP}${ruta}`,
-      datosN
+      envioStore.packageMessage
     );
     return data;
   } catch (error) {
@@ -30,30 +26,12 @@ const enviar = async () => {
   }
 };
 
-const enviarConPromesa = () => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(enviar());
-    }, 30000);
-  });
-};
 
-const sendMessage = async () => {
-  try {
-    sendTest.value = true;
-    const mensaje = await enviarConPromesa();
-    console.log(mensaje);
-  } catch (error) {
-    console.log(error);
-  } finally {
-    sendTest.value = false;
-  }
-};
 </script>
 <template>
   <div
     class="fixed w-full h-full bg-black/10 top-0 left-0 flex justify-center items-center z-50"
-    v-if="envioStore.openModalTest"
+    v-if="envioStore.varAbriModalPrueba"
   >
     <div
       class="bg-white w-96 p-4 shadow-md shadow-black/50 rounded-md relative"
@@ -75,7 +53,7 @@ const sendMessage = async () => {
         <span
           ><i class="fa-jelly fa-regular fa-phone"></i> Envio de prueba</span
         >
-        <button @click="envioStore.changeStateModalTest(false)">
+        <button @click="envioStore.fAbrirPrueba(false)">
           <i class="fa-jelly fa-regular fa-xmark"></i>
         </button>
       </h1>
@@ -87,7 +65,7 @@ const sendMessage = async () => {
       <div class="flex items-center justify-end mt-4">
         <button
           class="bg-gray-600 hover:bg-gray-500 px-4 py-2 rounded-sm shadow-md text-white text-sm"
-          @click="sendMessage"
+          @click="enviar"
         >
           Enviar mensaje
         </button>

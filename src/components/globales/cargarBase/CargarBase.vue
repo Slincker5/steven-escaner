@@ -44,7 +44,7 @@ const { fileInfo, onFileChange, inputBase, cargar, subirBaseAlServidor } =
       >
         <i class="fa-jelly-duo fa-regular fa-paper-plane"></i> Descargar
         plantilla </a
-      ><button
+      ><button v-if="fileInfo"
         class="w-full mt-4 bg-green-500 border border-solid border-green-600 hover:bg-green-700 px-4 py-2 rounded-sm shadow-md shadow-black/40 text-white text-sm inline-block"
         @click="subirBaseAlServidor"
       >

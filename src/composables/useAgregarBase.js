@@ -2,9 +2,9 @@ import { ref } from "vue";
 import axios from "axios";
 import * as XLSX from "xlsx";
 import { storeCargarBase } from "@/store/storeCargarBase";
-import { storeValidarWhatsapp } from "@/store/storeValidarWhatsapp";
-const validarWhatsapp = storeValidarWhatsapp();
 const baseCargada = storeCargarBase();
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
 
 export const useAgregarBase = () => {
   const token = ref(localStorage.getItem("token"));
@@ -68,10 +68,10 @@ export const useAgregarBase = () => {
     });
 
     baseCargada.editarBase(datos.value);
-    console.log(baseCargada.base);
   };
 
   const cargar = () => {
+    inputBase.value.value = "";
     inputBase.value.click();
   };
 
@@ -79,7 +79,7 @@ export const useAgregarBase = () => {
     try {
       const { data } = await axios.get(
         "https://steven.multimarcas.app/api/base/list",
-        { headers }
+        { headers },
       );
       if (data.length > 0) {
         baseCargada.editarBase(data);
@@ -94,35 +94,36 @@ export const useAgregarBase = () => {
     return String(n).replace(/\D/g, "");
   };
 
-  const eliminarBase = async () => {
+  const subirBaseAlServidor = () => {
     try {
-        const { data } = axios.delete(
-          "https://steven.multimarcas.app/api/base/delete", { headers }
-        );
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const subirBaseAlServidor = async () => {
-    try {
-      baseCargada.base.forEach((item) => {
+      baseCargada.base.forEach(async (item) => {
         const dataPackage = {
           cliente: item.CLIENTE,
           nombre: item.NOMBRE,
           numero: limpiarNumero(item.NUMERO),
           fecha: item.FECHA,
         };
-        const { data } = axios.post(
+        const { data } = await axios.post(
           "https://steven.multimarcas.app/api/base/create",
           dataPackage,
-          { headers }
+          { headers },
         );
+        toast.success(data.message, {
+          theme: "colored",
+          autoClose: 1500,
+          position: toast.POSITION.BOTTOM_LEFT,
+          transition: toast.TRANSITIONS.ZOOM,
+        });
         getBase();
+        reiniciarEstado(false);
       });
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const reiniciarEstado = (n) => {
+    fileInfo.value = n;
   };
   return {
     fileInfo,
@@ -132,5 +133,6 @@ export const useAgregarBase = () => {
     datos,
     getBase,
     subirBaseAlServidor,
+    reiniciarEstado,
   };
 };

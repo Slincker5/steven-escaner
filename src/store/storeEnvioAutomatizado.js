@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { useGetRoutes } from "@/composables/getRoutes";
-import { ref, nextTick } from "vue";
+import { ref } from "vue";
 import axios from "axios";
 
 export const storeEnvioAutomatizado = defineStore("EnvioAutomatizado", () => {
@@ -13,101 +13,49 @@ export const storeEnvioAutomatizado = defineStore("EnvioAutomatizado", () => {
   const categorias = ref([]);
   const plantillas = ref([]);
   const imagen = ref(false);
-  const modalSms = ref("");
+  const mensaje = ref("");
   const listaMensajes = ref(null);
-  const selectedFile = ref(null);
+  const varImagenSeleccionada = ref(null);
   const fileInput = ref(null);
-  const openModalTest = ref(false);
+  const varAbriModalPrueba = ref(false);
   const packageMessage = ref({
     imageUrl: false,
   });
 
   // Funciones ------------------------
 
-  const deleteImage = (n) => {
+  const quitarImagen = (n) => {
     packageMessage.value.imageUrl = n;
     imagen.value = n
   };
-  const changeStateModalTest = (n) => {
-    openModalTest.value = n;
-  };
-
-  const getMessage = async (categoria) => {
-    try {
-      const headers = {
-        Authorization: "Bearer " + token.value,
-        "Content-Type": "application/json",
-      };
-      const dataMensaje = { categoria };
-
-      const { data } = await axios.post(listMessaggePersonalized, dataMensaje, {
-        headers,
-      });
-
-      plantillas.value = data;
-
-      // esperar a que Vue pinte los mensajes y luego bajar al fondo
-      await nextTick();
-      scrollBottom();
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const getCategory = async () => {
-    try {
-      const headers = {
-        Authorization: "Bearer " + token.value,
-        "Content-Type": "application/json",
-      };
-
-      // Si listCategory es string úsalo, si es función ejecútalo
-      const { data } = await axios.get(
-        typeof listCategory === "function" ? listCategory() : listCategory,
-        { headers }
-      );
-      categorias.value = data;
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const seleccionarPlantilla = (n) => {
-    modalSms.value = n; // esto llena el textarea automáticamente
-  };
-
-  // 🔑 Forzar scroll al fondo
-  const scrollBottom = () => {
-    if (listaMensajes.value) {
-      listaMensajes.value.scrollTop = listaMensajes.value.scrollHeight;
-    }
+  const fAbrirPrueba = (n) => {
+    varAbriModalPrueba.value = n;
   };
 
   // Abrir diálogo de archivos
-  const openFileDialog = () => {
+  const fAbrirAdministrador = () => {
     if (fileInput.value) fileInput.value.click();
   };
 
   // Guardar archivo seleccionado
-  const handleFileChange = (event) => {
+  const fCambioDeImagen = (event) => {
     if (!event.target.files.length) {
       console.log("Cancelado, no se seleccionó archivo.");
       return;
     }
-    selectedFile.value = event.target.files[0];
-    uploadFile();
-    console.log("Archivo seleccionado:", selectedFile.value.name);
+    varImagenSeleccionada.value = event.target.files[0];
+    fsubirImagen();
   };
 
   // Subir archivo a API
-  const uploadFile = async () => {
-    if (!selectedFile.value) {
+  const fsubirImagen = async () => {
+    if (!varImagenSeleccionada.value) {
       alert("Primero selecciona una imagen");
       return;
     }
 
     const formData = new FormData();
-    formData.append("file", selectedFile.value);
+    formData.append("file", varImagenSeleccionada.value);
 
     try {
       const res = await axios.post(uploadFileMessage, formData, {
@@ -124,29 +72,22 @@ export const storeEnvioAutomatizado = defineStore("EnvioAutomatizado", () => {
     }
   };
 
-  // Ejecutar al inicio
-  getCategory();
 
   // Retorno del store ----------------
   return {
-    modalSms,
+    mensaje,
     categorias,
     plantillas,
     imagen,
     listaMensajes,
     fileInput,
-    selectedFile,
-    openModalTest,
-    deleteImage,
-
-    getMessage,
-    getCategory,
-    seleccionarPlantilla,
-    scrollBottom,
-    openFileDialog,
-    handleFileChange,
-    uploadFile,
-    changeStateModalTest,
+    varImagenSeleccionada,
+    varAbriModalPrueba,
+    quitarImagen,
+    fAbrirAdministrador,
+    fCambioDeImagen,
+    fsubirImagen,
+    fAbrirPrueba,
     packageMessage,
   };
 });
