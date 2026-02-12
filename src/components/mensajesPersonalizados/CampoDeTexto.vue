@@ -1,11 +1,55 @@
 <script setup>
+import { ref } from "vue";
+
+import axios from "axios";
 import MensajePrueba from "../enviarMensajes/MensajePrueba.vue";
 import { storeEnvioAutomatizado } from "@/store/storeEnvioAutomatizado";
 import { storeCargarBase } from "@/store/storeCargarBase";
 
 const baseCargada = storeCargarBase();
-
 const envioStore = storeEnvioAutomatizado();
+
+const estadoEnviando = ref(false)
+const enviarLote = async (numero, mensaje) => {
+  try {
+    const API_HTTP = "https://auto.autowat.site/message/send";
+    const datos = {
+      numero: numero,
+      mensaje: mensaje,
+    };
+    const { data } = await axios.post(API_HTTP, datos);
+    console.log(data);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const enviarConPromesa = (numero, mensaje) => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(enviarLote(numero, mensaje));
+    }, 30000);
+  });
+};
+
+const sendMessage = async (numero, mensaje) => {
+  try {
+    estadoEnviando.value = true
+    const mensaje2 = await enviarConPromesa(numero, mensaje);
+    console.log(mensaje2);
+  } catch (error) {
+    console.log(error);
+  } finally {
+    estadoEnviando.value = false;
+  }
+};
+
+const enviar = async () => {
+  for (const item of baseCargada.base) {
+    await sendMessage(item.numero, item.mensaje)
+  }
+};
+
 </script>
 <template>
   <div class="flex flex-col h-screen">
@@ -78,7 +122,7 @@ const envioStore = storeEnvioAutomatizado();
             </button>
             <button
               class="bg-gray-600 hover:bg-gray-500 px-4 py-2 rounded-sm shadow-md text-white text-sm"
-              @click.prevent="wsFunciones.iniciarEnvioEnBackground"
+              @click.prevent="enviar" :disabled="estadoEnviando"
             >
               Enviar lote
             </button>
@@ -89,7 +133,6 @@ const envioStore = storeEnvioAutomatizado();
 
     <!-- Lista de mensajes -->
     <Transition name="zoom"><MensajePrueba></MensajePrueba> </Transition>
-
   </div>
 </template>
 

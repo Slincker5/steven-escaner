@@ -94,29 +94,31 @@ export const useAgregarBase = () => {
     return String(n).replace(/\D/g, "");
   };
 
-  const subirBaseAlServidor = () => {
+  const subirBaseAlServidor = async () => {
+    let clientes = [];
+    baseCargada.base.forEach((item) => {
+      const dataPackage = {
+        cliente: item.CLIENTE,
+        nombre: item.NOMBRE,
+        numero: limpiarNumero(item.NUMERO),
+        fecha: item.FECHA,
+      };
+      clientes.push(dataPackage);
+    });
     try {
-      baseCargada.base.forEach(async (item) => {
-        const dataPackage = {
-          cliente: item.CLIENTE,
-          nombre: item.NOMBRE,
-          numero: limpiarNumero(item.NUMERO),
-          fecha: item.FECHA,
-        };
-        const { data } = await axios.post(
-          "https://steven.multimarcas.app/api/base/create",
-          dataPackage,
-          { headers },
-        );
-        toast.success(data.message, {
-          theme: "colored",
-          autoClose: 1500,
-          position: toast.POSITION.BOTTOM_LEFT,
-          transition: toast.TRANSITIONS.ZOOM,
-        });
-        getBase();
-        reiniciarEstado(false);
+      const { data } = await axios.post(
+        "https://steven.multimarcas.app/api/base/create",
+        clientes,
+        { headers },
+      );
+      toast.success(data.message, {
+        theme: "colored",
+        autoClose: 1500,
+        position: toast.POSITION.BOTTOM_LEFT,
+        transition: toast.TRANSITIONS.ZOOM,
       });
+      getBase();
+      reiniciarEstado(false);
     } catch (error) {
       console.log(error);
     }

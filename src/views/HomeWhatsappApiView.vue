@@ -5,34 +5,11 @@ import MensajePersonalizado from "@/components/mensajesPersonalizados/MensajePer
 import Preview from "@/components/Preview.vue";
 import CargarBase from "@/components/globales/cargarBase/CargarBase.vue";
 import ListadoBase from "@/components/globales/cargarBase/ListadoBase.vue";
-import ListaPlantillas from "@/components/mensajesPersonalizados/listaPlantillas.vue";
 import VistaHistoriaEnvios from "@/components/enviarMensajes/vistaHistoriaEnvios.vue";
+import CampoDeTexto from "@/components/mensajesPersonalizados/CampoDeTexto.vue";
 
 const menu = storeMenuAutowhat();
 
-// Ejemplo para cargar emojis agrupados (solo informativo)
-const cargarEmojisPorCategoria = async () => {
-  const res = await fetch(
-    "https://cdn.jsdelivr.net/npm/emojibase-data@latest/en/data.json"
-  );
-  const emojis = await res.json();
-  const agrupados = {};
-
-  emojis.forEach((emoji) => {
-    const grupo = emoji.group || "Unknown";
-    if (!agrupados[grupo]) agrupados[grupo] = [];
-    agrupados[grupo].push({
-      emoji: emoji.emoji,
-      label: emoji.label,
-      unicode: emoji.hexcode,
-    });
-  });
-
-  console.log(agrupados);
-  return agrupados;
-};
-
-cargarEmojisPorCategoria();
 </script>
 
 <template>
@@ -50,7 +27,7 @@ cargarEmojisPorCategoria();
 
       <Transition name="zoom">
         <div v-if="menu.enviar_mensajes" class="flex-1 min-h-0 overflow-y-auto">
-          <ListaPlantillas />
+          <CampoDeTexto />
         </div>
       </Transition>
 
