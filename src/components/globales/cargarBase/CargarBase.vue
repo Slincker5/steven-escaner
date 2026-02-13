@@ -1,5 +1,4 @@
 <script setup>
-
 import { useAgregarBase } from "@/composables/useAgregarBase";
 const { fileInfo, onFileChange, inputBase, cargar, subirBaseAlServidor } =
   useAgregarBase();

@@ -2,34 +2,45 @@
 import axios from "axios";
 import { ref, Transition } from "vue";
 import { storeEnvioAutomatizado } from "@/store/storeEnvioAutomatizado";
+import CargandoForm from "../globales/CargandoForm.vue";
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
+
 const envioStore = storeEnvioAutomatizado();
 
 const API_HTTP = "https://auto.autowat.site";
 const numero = ref("503");
 const sendTest = ref(false);
+const enviando = ref(false);
 const enviar = async () => {
   try {
-
-    const ruta = envioStore.packageMessage?.imagenUrl
-      ? "/message/media"
-      : "/message/send";
+    enviando.value = true;
+    const ruta =
+      envioStore.packageMessage.imagenUrl === null
+        ? "/message/media"
+        : "/message/send";
 
     envioStore.packageMessage.numero = numero.value;
     envioStore.packageMessage.mensaje = envioStore.mensaje;
-    if(!envioStore.packageMessage.imagenUrl){
-      envioStore.packageMessage.imagenUrl = envioStore.imagen
+    if (!envioStore.packageMessage.imagenUrl) {
+      envioStore.packageMessage.imagenUrl = envioStore.imagen;
     }
     const { data } = await axios.post(
       `${API_HTTP}${ruta}`,
-      envioStore.packageMessage
+      envioStore.packageMessage,
     );
-    return data;
+    toast.success(`Mensaje de prueba enviado a ${envioStore.packageMessage.numero}`, {
+        theme: "colored",
+        autoClose: 1500,
+        position: toast.POSITION.BOTTOM_LEFT,
+        transition: toast.TRANSITIONS.ZOOM,
+      });
   } catch (error) {
     console.log(error);
+  } finally {
+    enviando.value = false;
   }
 };
-
-
 </script>
 <template>
   <div
@@ -75,4 +86,7 @@ const enviar = async () => {
       </div>
     </div>
   </div>
+  <CargandoForm :enviando="enviando"
+    textoCarga="Enviando mensaje de prueba, espera..."
+  ></CargandoForm>
 </template>

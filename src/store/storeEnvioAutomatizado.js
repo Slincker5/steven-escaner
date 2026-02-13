@@ -19,7 +19,7 @@ export const storeEnvioAutomatizado = defineStore("EnvioAutomatizado", () => {
   const fileInput = ref(null);
   const varAbriModalPrueba = ref(false);
   const packageMessage = ref({
-    imagenUrl: false,
+    imagenUrl: null,
   });
 
   // Funciones ------------------------
