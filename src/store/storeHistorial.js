@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { ref } from "vue"
 
-export const storeHistorial = defineStore("EnvioAutomatizado", () => {
+export const storeHistorial = defineStore("storeHistorial", () => {
     const enviando = ref(false)
     const enviados = ref(0)
 
