@@ -10,12 +10,15 @@ const sendTest = ref(false);
 const enviar = async () => {
   try {
 
-    const ruta = envioStore.packageMessage?.imageUrl
+    const ruta = envioStore.packageMessage?.imagenUrl
       ? "/message/media"
       : "/message/send";
 
     envioStore.packageMessage.numero = numero.value;
     envioStore.packageMessage.mensaje = envioStore.mensaje;
+    if(!envioStore.packageMessage.imagenUrl){
+      envioStore.packageMessage.imagenUrl = envioStore.imagen
+    }
     const { data } = await axios.post(
       `${API_HTTP}${ruta}`,
       envioStore.packageMessage

@@ -13,13 +13,13 @@ export const storeEnvioAutomatizado = defineStore("EnvioAutomatizado", () => {
   const categorias = ref([]);
   const plantillas = ref([]);
   const imagen = ref(false);
-  const mensaje = ref("");
+  const mensaje = ref(null);
   const listaMensajes = ref(null);
   const varImagenSeleccionada = ref(null);
   const fileInput = ref(null);
   const varAbriModalPrueba = ref(false);
   const packageMessage = ref({
-    imageUrl: false,
+    imagenUrl: false,
   });
 
   // Funciones ------------------------

@@ -15,8 +15,11 @@ const enviarLote = async (numero, mensaje) => {
     const API_HTTP = "https://auto.autowat.site/message/send";
     const datos = {
       numero: numero,
-      mensaje: mensaje,
+      mensaje: mensaje
     };
+    if(!envioStore.imagen){
+      datos.imagenUrl = envioStore.imagen
+    }
     const { data } = await axios.post(API_HTTP, datos);
     console.log(data);
   } catch (error) {
@@ -57,7 +60,7 @@ const enviar = async () => {
     <div class="p-4 bg-white shrink-0">
       <h2 class="font-medium text-gray-900">
         <i class="fa-slab fa-regular fa-circle mr-2 text-blue-600"></i>
-        Envio Automatizado
+        Envio Automatizado {{  envioStore.mensaje }}
       </h2>
     </div>
 
