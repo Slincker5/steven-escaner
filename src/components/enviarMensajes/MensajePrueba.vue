@@ -16,7 +16,7 @@ const enviar = async () => {
   try {
     enviando.value = true;
     const ruta =
-      envioStore.packageMessage.imagenUrl === null
+      envioStore.imagen === false
         ? "/message/send"
         : "/message/media";
 
