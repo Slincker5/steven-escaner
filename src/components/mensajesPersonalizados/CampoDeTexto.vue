@@ -69,7 +69,7 @@ const enviar = async () => {
     <div class="p-4 bg-white shrink-0">
       <h2 class="font-medium text-gray-900">
         <i class="fa-slab fa-regular fa-circle mr-2 text-blue-600"></i>
-        Envio Automatizado {{ baseCargada.base }}
+        Envio Automatizado
       </h2>
     </div>
 
