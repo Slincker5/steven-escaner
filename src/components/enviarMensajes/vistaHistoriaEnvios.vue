@@ -17,7 +17,7 @@ const historialStore = storeHistorial()
     </div>
     <div class="flex items-center justify-between">
       <div class="p-4"><span>Base actual: </span> {{ baseCargada.base.length }}</div>
-      <Transition><div v-if="historialStore.enviando">Progreso: {{ historialStore.enviados }}/{{ baseCargada.base.length }} enviados</div></Transition>  
+      <Transition><div>Progreso: {{ historialStore.enviados }}/{{ baseCargada.base.length }} enviados</div></Transition>  
     </div>
   </div>
 </template>
