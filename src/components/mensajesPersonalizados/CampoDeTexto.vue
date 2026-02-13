@@ -9,12 +9,11 @@ import { storeHistorial } from "@/store/storeHistorial";
 
 const baseCargada = storeCargarBase();
 const envioStore = storeEnvioAutomatizado();
-const historialStore = storeHistorial()
+const historialStore = storeHistorial();
 
 const estadoEnviando = ref(false);
 const enviarLote = async (numero, mensaje, nombre, fecha) => {
   try {
-    historialStore.fcambiarEstadoEnviar(true)
     const ruta =
       envioStore.imagen === false ? "/message/send" : "/message/media";
     const API_HTTP = `https://auto.autowat.site${ruta}`;
@@ -22,7 +21,7 @@ const enviarLote = async (numero, mensaje, nombre, fecha) => {
       numero: numero,
       mensaje: mensaje,
       nombre: nombre,
-      fecha: fecha
+      fecha: fecha,
     };
     if (!envioStore.packageMessage.imagenUrl) {
       datos.imagenUrl = envioStore.imagen;
@@ -31,7 +30,7 @@ const enviarLote = async (numero, mensaje, nombre, fecha) => {
       datos.imagenUrl = envioStore.imagen;
     }
     const { data } = await axios.post(API_HTTP, datos);
-    historialStore.fcambiarEstadoEnviados(1)
+    historialStore.fcambiarEstadoEnviados("1");
   } catch (error) {
     console.log(error);
   }
@@ -58,6 +57,7 @@ const sendMessage = async (numero, mensaje, nombre, fecha) => {
 };
 
 const enviar = async () => {
+  historialStore.fcambiarEstadoEnviar(true);
   for (const item of baseCargada.base) {
     await sendMessage(item.numero, envioStore.mensaje, item.nombre, item.fecha);
   }
