@@ -42,7 +42,7 @@ const enviar = async () => {
     const status = error?.response?.status;
     console.log(error);
     if (status === 429) {
-      toast.success(`Solo puedes enviar 2 mensajes por minuto.`, {
+      toast.error(`Solo puedes enviar 2 mensajes por minuto.`, {
         theme: "colored",
         autoClose: 1500,
         position: toast.POSITION.BOTTOM_LEFT,
