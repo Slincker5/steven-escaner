@@ -133,7 +133,7 @@ const enviar = async () => {
               Enviar prueba
             </button>
             <button
-              class="bg-gray-600 hover:bg-gray-500 px-4 py-2 rounded-sm shadow-md text-white text-sm"
+              class="bg-gray-600 hover:bg-gray-800 disabled:bg-gray-400 px-4 py-2 rounded-sm shadow-md text-white text-sm"
               @click.prevent="enviar"
               :disabled="estadoEnviando"
             >
