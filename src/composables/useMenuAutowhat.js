@@ -17,22 +17,15 @@ let log = ref(false)
 
 const getInfo = async () => {
     try {
-        const { data } = await axios.get("https://api.autowat.site/me")
-        numero.value = data.data.number
-        nombre.value = data.data.name
+        const { data } = await axios.get("https://auto.autowat.site/auth")
+        numero.value = data.numero
+        nombre.value = data.nombre
+        photo.value = data.fotoUrl
     } catch(error){
         console.log(error)
     }
 }
 
-const getPhoto = async () => {
-    try {
-        const { data } = await axios.get("https://api.autowat.site/me/photo")
-        photo.value = data.data.url
-    } catch(error){
-        console.log(error)
-    }
-}
 
 const logout = async () => {
     try {
@@ -52,7 +45,6 @@ const logout = async () => {
     numero,
     nombre,
     getInfo,
-    getPhoto,
     logout,
     log
   };

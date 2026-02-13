@@ -3,16 +3,13 @@ import { storeMenuAutowhat } from "@/store/storeMenuAutowhat";
 import { useMenuAutowhat } from "@/composables/useMenuAutowhat";
 import CerrarSesionWhatsapp from "@/components/CerrarSesionWhatsapp.vue";
 const menu = storeMenuAutowhat();
-const { photo, numero, nombre, logout, getInfo, getPhoto, log } =
+const { photo, numero, nombre, logout, getInfo, log } =
   useMenuAutowhat();
 
 getInfo();
-getPhoto();
 </script>
 <template>
-  <Transition>
     <CerrarSesionWhatsapp v-if="log"></CerrarSesionWhatsapp>
-  </Transition>
 
   <nav class="w-[260px] bg-white shadow-lg shadow-black/20">
     <div class="bg-gray-50 pt-8">

@@ -12,10 +12,15 @@ export const storeHistorial = defineStore("storeHistorial", () => {
     const fcambiarEstadoEnviados = () => {
         enviados.value ++
     }
+    
+    const fresetearEnviados = () => {
+        enviados.value = 0
+    }
     return {
         enviados,
         enviando,
         fcambiarEstadoEnviar,
-        fcambiarEstadoEnviados
+        fcambiarEstadoEnviados,
+        fresetearEnviados
     }
 })
