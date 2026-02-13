@@ -30,7 +30,7 @@ const enviarLote = async (numero, mensaje, nombre, fecha) => {
       datos.imagenUrl = envioStore.imagen;
     }
     const { data } = await axios.post(API_HTTP, datos);
-    historialStore.fcambiarEstadoEnviados("1");
+    historialStore.fcambiarEstadoEnviados();
   } catch (error) {
     console.log(error);
   }

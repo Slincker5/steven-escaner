@@ -9,8 +9,8 @@ export const storeHistorial = defineStore("storeHistorial", () => {
         enviando.value = n
     } 
 
-    const fcambiarEstadoEnviados = (n) => {
-        enviados.value += n
+    const fcambiarEstadoEnviados = () => {
+        enviados.value ++
     }
     return {
         enviados,
