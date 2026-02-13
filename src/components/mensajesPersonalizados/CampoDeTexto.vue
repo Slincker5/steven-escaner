@@ -9,16 +9,21 @@ import { storeCargarBase } from "@/store/storeCargarBase";
 const baseCargada = storeCargarBase();
 const envioStore = storeEnvioAutomatizado();
 
-const estadoEnviando = ref(false)
-const enviarLote = async (numero, mensaje) => {
+const estadoEnviando = ref(false);
+const enviarLote = async (numero, mensaje, imagen) => {
   try {
-    const API_HTTP = "https://auto.autowat.site/message/send";
+    const ruta =
+      envioStore.imagen === false ? "/message/send" : "/message/media";
+    const API_HTTP = `https://auto.autowat.site${ruta}`;
     const datos = {
       numero: numero,
-      mensaje: mensaje
+      mensaje: mensaje,
     };
-    if(!envioStore.imagen){
-      datos.imagenUrl = envioStore.imagen
+    if (!envioStore.packageMessage.imagenUrl) {
+      datos.imagenUrl = envioStore.imagen;
+    }
+    if (!envioStore.imagen) {
+      datos.imagenUrl = envioStore.imagen;
     }
     const { data } = await axios.post(API_HTTP, datos);
     console.log(data);
@@ -37,7 +42,7 @@ const enviarConPromesa = (numero, mensaje) => {
 
 const sendMessage = async (numero, mensaje) => {
   try {
-    estadoEnviando.value = true
+    estadoEnviando.value = true;
     const mensaje2 = await enviarConPromesa(numero, mensaje);
     console.log(mensaje2);
   } catch (error) {
@@ -49,10 +54,9 @@ const sendMessage = async (numero, mensaje) => {
 
 const enviar = async () => {
   for (const item of baseCargada.base) {
-    await sendMessage(item.numero, envioStore.mensaje)
+    await sendMessage(item.numero, envioStore.mensaje);
   }
 };
-
 </script>
 <template>
   <div class="flex flex-col h-screen">
@@ -60,7 +64,7 @@ const enviar = async () => {
     <div class="p-4 bg-white shrink-0">
       <h2 class="font-medium text-gray-900">
         <i class="fa-slab fa-regular fa-circle mr-2 text-blue-600"></i>
-        Envio Automatizado {{  envioStore.mensaje }}
+        Envio Automatizado {{ envioStore.mensaje }}
       </h2>
     </div>
 
@@ -125,7 +129,8 @@ const enviar = async () => {
             </button>
             <button
               class="bg-gray-600 hover:bg-gray-500 px-4 py-2 rounded-sm shadow-md text-white text-sm"
-              @click.prevent="enviar" :disabled="estadoEnviando"
+              @click.prevent="enviar"
+              :disabled="estadoEnviando"
             >
               Enviar lote
             </button>
