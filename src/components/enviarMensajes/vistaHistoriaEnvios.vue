@@ -1,6 +1,9 @@
 <script setup>
 import { storeCargarBase } from "@/store/storeCargarBase";
+import { storeHistorial } from "@/store/storeHistorial";
+
 const baseCargada = storeCargarBase();
+const historialStore = storeHistorial()
 </script>
 <template>
   <div class="flex flex-col h-screen">
@@ -12,8 +15,9 @@ const baseCargada = storeCargarBase();
         Progreso de envíos
       </h2>
     </div>
-    <div>
+    <div class="flex items-center justify-between">
       <div class="p-4"><span>Base actual: </span> {{ baseCargada.base.length }}</div>
+      <Transition><div v-if="historialStore.enviando">Progreso: {{ historialStore.enviados }}/{{ baseCargada.base.length }} enviados</div></Transition>  
     </div>
   </div>
 </template>

@@ -5,13 +5,16 @@ import axios from "axios";
 import MensajePrueba from "../enviarMensajes/MensajePrueba.vue";
 import { storeEnvioAutomatizado } from "@/store/storeEnvioAutomatizado";
 import { storeCargarBase } from "@/store/storeCargarBase";
+import { storeHistorial } from "@/store/storeHistorial";
 
 const baseCargada = storeCargarBase();
 const envioStore = storeEnvioAutomatizado();
+const historialStore = storeHistorial()
 
 const estadoEnviando = ref(false);
 const enviarLote = async (numero, mensaje, nombre, fecha) => {
   try {
+    historialStore.fcambiarEstadoEnviar(true)
     const ruta =
       envioStore.imagen === false ? "/message/send" : "/message/media";
     const API_HTTP = `https://auto.autowat.site${ruta}`;
@@ -28,7 +31,7 @@ const enviarLote = async (numero, mensaje, nombre, fecha) => {
       datos.imagenUrl = envioStore.imagen;
     }
     const { data } = await axios.post(API_HTTP, datos);
-    console.log(data);
+    historialStore.fcambiarEstadoEnviados(1)
   } catch (error) {
     console.log(error);
   }
