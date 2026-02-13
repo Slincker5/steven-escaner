@@ -21,7 +21,7 @@ const logout = () => {
     <header
       class="p-4 py-5 w-full bg-blue-700 flex items-center justify-between"
     >
-      <router-link class="text-[#fff] logo text-2xl" to="/">AUTOWHAT</router-link>
+      <router-link class="text-[#fff] logo text-2xl" to="/">AUTOWAT</router-link>
       <button class="text-white" v-if="token" @click.prevent="logout">
         <i class="fa-jelly-duo fa-regular fa-arrow-right-to-bracket"></i> Salir
       </button>
