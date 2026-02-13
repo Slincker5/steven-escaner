@@ -42,10 +42,10 @@ const enviarConPromesa = (numero, mensaje, nombre, fecha) => {
   });
 };
 
-const sendMessage = async (numero, mensaje) => {
+const sendMessage = async (numero, mensaje, nombre, fecha) => {
   try {
     estadoEnviando.value = true;
-    const mensaje2 = await enviarConPromesa(numero, mensaje);
+    const mensaje2 = await enviarConPromesa(numero, mensaje, nombre, fecha);
     console.log(mensaje2);
   } catch (error) {
     console.log(error);
