@@ -29,14 +29,26 @@ const enviar = async () => {
       `${API_HTTP}${ruta}`,
       envioStore.packageMessage,
     );
-    toast.success(`Mensaje de prueba enviado a ${envioStore.packageMessage.numero}`, {
+    toast.success(
+      `Mensaje de prueba enviado a ${envioStore.packageMessage.numero}`,
+      {
+        theme: "colored",
+        autoClose: 1500,
+        position: toast.POSITION.BOTTOM_LEFT,
+        transition: toast.TRANSITIONS.ZOOM,
+      },
+    );
+  } catch (error) {
+    const status = error?.response?.status;
+    console.log(error);
+    if (status === 429) {
+      toast.success(`Solo puedes enviar 2 mensajes por minuto.`, {
         theme: "colored",
         autoClose: 1500,
         position: toast.POSITION.BOTTOM_LEFT,
         transition: toast.TRANSITIONS.ZOOM,
       });
-  } catch (error) {
-    console.log(error);
+    }
   } finally {
     enviando.value = false;
   }
@@ -86,7 +98,8 @@ const enviar = async () => {
       </div>
     </div>
   </div>
-  <CargandoForm :enviando="enviando"
+  <CargandoForm
+    :enviando="enviando"
     textoCarga="Enviando mensaje de prueba, espera..."
   ></CargandoForm>
 </template>
