@@ -10,7 +10,7 @@ const baseCargada = storeCargarBase();
 const envioStore = storeEnvioAutomatizado();
 
 const estadoEnviando = ref(false);
-const enviarLote = async (numero, mensaje, imagen) => {
+const enviarLote = async (numero, mensaje, nombre, fecha) => {
   try {
     const ruta =
       envioStore.imagen === false ? "/message/send" : "/message/media";
@@ -18,6 +18,8 @@ const enviarLote = async (numero, mensaje, imagen) => {
     const datos = {
       numero: numero,
       mensaje: mensaje,
+      nombre: nombre,
+      fecha: fecha
     };
     if (!envioStore.packageMessage.imagenUrl) {
       datos.imagenUrl = envioStore.imagen;
@@ -32,10 +34,10 @@ const enviarLote = async (numero, mensaje, imagen) => {
   }
 };
 
-const enviarConPromesa = (numero, mensaje) => {
+const enviarConPromesa = (numero, mensaje, nombre, fecha) => {
   return new Promise((resolve) => {
     setTimeout(() => {
-      resolve(enviarLote(numero, mensaje));
+      resolve(enviarLote(numero, mensaje, nombre, fecha));
     }, 30000);
   });
 };
@@ -64,7 +66,7 @@ const enviar = async () => {
     <div class="p-4 bg-white shrink-0">
       <h2 class="font-medium text-gray-900">
         <i class="fa-slab fa-regular fa-circle mr-2 text-blue-600"></i>
-        Envio Automatizado {{ envioStore.mensaje }}
+        Envio Automatizado {{ baseCargada.base }}
       </h2>
     </div>
 
