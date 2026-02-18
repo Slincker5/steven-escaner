@@ -10,7 +10,7 @@ const { base } = baseCargada;
 </script>
 <template>
   <div class="text-gray-500 text-sm flex items-center justify-between pb-2">
-    <span class="text-gray-500 text-sm">Tiempo estimado:</span> {{ historialStore.tiempo }}
+    <span class="text-gray-600 text-sm"><i class="fa-duotone fa-solid fa-loader fa-spin text-gray-600 text-sm"></i> Tiempo estimado:</span> {{ historialStore.tiempo }}
   </div>
   <div class="relative">
 <progress
