@@ -1,6 +1,7 @@
 <script setup>
 import { storeCargarBase } from "@/store/storeCargarBase";
 import { storeHistorial } from "@/store/storeHistorial";
+import BarraProgreso from "./BarraProgreso.vue";
 
 const baseCargada = storeCargarBase();
 const historialStore = storeHistorial()
@@ -15,9 +16,11 @@ const historialStore = storeHistorial()
         Progreso de envíos
       </h2>
     </div>
-    <div class="flex items-center justify-between">
-      <div class="p-4"><span>Base actual: </span> {{ baseCargada.base.length }}</div>
-      <Transition><div v-if="historialStore.enviando">Progreso: {{ historialStore.enviados }}/{{ baseCargada.base.length }} enviados</div></Transition>  
+    <Transition name="zoom"><div class="p-4 pb-0" v-if="historialStore.enviando"><BarraProgreso></BarraProgreso></div></Transition>
+    <div class="flex items-center justify-between gap-4 p-4 pt-2">
+      <div class="text-sm"><span class="text-gray-900 font-medium text-sm">Base de clientes: </span> {{ baseCargada.base.length }}</div>
+      <Transition name="zoom"><div class="text-green-600 text-sm" v-if="historialStore.enviando"><span class=" font-medium text-sm">Sin whatsapp:</span>  {{ historialStore.sinWhatsapp }}</div></Transition>
+      <Transition name="zoom"><div v-if="historialStore.enviando" class="text-sm"><span class="text-gray-900 font-medium text-sm">Progreso:</span> {{ Math.trunc(historialStore.fmodificarProgreso() / baseCargada.base.length * 100) }}%</div> </Transition>
     </div>
   </div>
 </template>

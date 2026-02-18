@@ -31,8 +31,12 @@ const enviarLote = async (numero, mensaje, nombre, fecha) => {
     }
     const { data } = await axios.post(API_HTTP, datos);
     historialStore.fcambiarEstadoEnviados();
+    historialStore.ftiempoEstimado();
   } catch (error) {
-    console.log(error);
+    if (error.status) {
+      historialStore.fmodifcarSinWhatsapp();
+      historialStore.ftiempoEstimado();
+    }
   }
 };
 
@@ -47,19 +51,28 @@ const enviarConPromesa = (numero, mensaje, nombre, fecha) => {
 const sendMessage = async (numero, mensaje, nombre, fecha) => {
   try {
     estadoEnviando.value = true;
-    const mensaje2 = await enviarConPromesa(numero, mensaje, nombre, fecha);
-    console.log(mensaje2);
+    await enviarConPromesa(numero, mensaje, nombre, fecha);
   } catch (error) {
-    console.log(error);
+    console.log(`ERORR DESDE SEND MESSAGE ${error}`);
+    if (error.response.status == "404") historialStore.fmodifcarSinWhatsapp();
   } finally {
     estadoEnviando.value = false;
   }
 };
 
 const enviar = async () => {
-  historialStore.fcambiarEstadoEnviar(true);
-  for (const item of baseCargada.base) {
-    await sendMessage(item.numero, envioStore.mensaje, item.nombre, item.fecha);
+  try {
+    historialStore.fcambiarEstadoEnviar(true);
+    for (const item of baseCargada.base) {
+      await sendMessage(
+        item.numero,
+        envioStore.mensaje,
+        item.nombre,
+        item.fecha,
+      );
+    }
+  } catch (error) {
+    console.log("ERROR: " + error);
   }
 };
 </script>
@@ -104,6 +117,7 @@ const enviar = async () => {
             class="flex-1 p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
             placeholder="Escribe tu mensaje..."
             v-model="envioStore.mensaje"
+            required
           />
         </div>
         <div class="flex items-center justify-between mt-4">
