@@ -1,26 +1,22 @@
 <script setup>
-import { computed, ref } from "vue";
-import { storeCargarBase } from "@/store/storeCargarBase";
 import { storeHistorial } from "@/store/storeHistorial";
 
-const baseCargada = storeCargarBase();
 const historialStore = storeHistorial();
-historialStore.ftiempoEstimado();
-const { base } = baseCargada;
 </script>
 <template>
   <div class="text-gray-500 text-sm flex items-center justify-between pb-2">
-    <span class="text-gray-600 text-sm"><i class="fa-duotone fa-solid fa-loader fa-spin text-gray-600 text-sm"></i> Tiempo estimado:</span> {{ historialStore.tiempo }}
+    <span class="text-gray-600 text-sm"><i class="fa-duotone fa-solid fa-loader fa-spin text-gray-600 text-sm"></i> Proximo envio en:</span> {{ historialStore.tiempo }}
   </div>
   <div class="relative">
-<progress
-    :max="base.length"
-    :value="historialStore.fmodificarProgreso()"
-    class="bar"
-  ></progress>
-  <div class="textoEnviado"> faltan {{ base.length - historialStore.fmodificarProgreso() }} por enviar</div>
+    <progress
+      :max="historialStore.total"
+      :value="historialStore.fmodificarProgreso()"
+      class="bar"
+    ></progress>
+    <div class="textoEnviado">
+      {{ historialStore.fmodificarProgreso() }} / {{ historialStore.total }} enviados
+    </div>
   </div>
-  
 </template>
 
 <style>

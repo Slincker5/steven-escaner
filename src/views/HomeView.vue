@@ -35,7 +35,87 @@ setInterval(() => {
 
 <template>
   <div class="p-4 overflow-y-scroll">
-    <div class="flex items-center justify-between bg-yellow-300 text-yellow-700 text-sm p-4 mb-4" v-if="rol === 'Admin'">Panel de aprobacion <router-link to="/lista-de-aprobacion" class="border border-solid border-yellow-600 px-3 pt-1 text-sm rounded-sm">Ver lista</router-link></div>
+    <div class="flex items-center justify-between bg-yellow-300 text-yellow-700 text-sm p-4 mb-4 rounded-md" v-if="rol === 'Admin'">Panel de aprobacion <router-link to="/lista-de-aprobacion" class="border border-solid border-yellow-600 px-3 pt-1 text-sm rounded-sm">Ver lista</router-link></div>
+
+    <!-- CARD AUTOWHAT - PRODUCTO ESTRELLA -->
+    <div class="relative overflow-hidden rounded-xl mb-6 shadow-xl shadow-blue-900/30">
+      <!-- Background gradient -->
+      <div class="absolute inset-0 bg-gradient-to-br from-blue-700 via-blue-800 to-indigo-900"></div>
+      <!-- Decoracion -->
+      <div class="absolute top-[-40px] right-[-40px] w-[200px] h-[200px] bg-blue-500/20 rounded-full blur-2xl"></div>
+      <div class="absolute bottom-[-30px] left-[-30px] w-[150px] h-[150px] bg-indigo-400/20 rounded-full blur-2xl"></div>
+
+      <div class="relative z-10 p-6 md:p-8">
+        <div class="flex items-start justify-between">
+          <div class="flex-1">
+            <!-- Badge -->
+            <div class="inline-flex items-center gap-1.5 bg-green-500/20 border border-green-400/30 text-green-300 text-xs font-medium px-3 py-1 rounded-full mb-4">
+              <i class="fa-duotone fa-regular fa-sparkles text-[10px]"></i>
+              Producto estrella
+            </div>
+
+            <h2 class="text-2xl md:text-3xl font-bold text-white mb-2">AutoWhat</h2>
+            <p class="text-blue-200 text-sm md:text-base mb-6 max-w-md">
+              Envio masivo de mensajes por WhatsApp. Personaliza con variables, adjunta imagenes y automatiza la comunicacion con tus clientes.
+            </p>
+
+            <!-- Features -->
+            <div class="grid grid-cols-2 gap-3 mb-6">
+              <div class="flex items-center gap-2 text-blue-100 text-xs">
+                <i class="fa-duotone fa-regular fa-messages text-blue-300"></i>
+                Mensajes masivos
+              </div>
+              <div class="flex items-center gap-2 text-blue-100 text-xs">
+                <i class="fa-duotone fa-regular fa-image text-blue-300"></i>
+                Imagenes + texto
+              </div>
+              <div class="flex items-center gap-2 text-blue-100 text-xs">
+                <i class="fa-duotone fa-regular fa-brackets-curly text-blue-300"></i>
+                Variables dinamicas
+              </div>
+              <div class="flex items-center gap-2 text-blue-100 text-xs">
+                <i class="fa-duotone fa-regular fa-gauge-high text-blue-300"></i>
+                Progreso en tiempo real
+              </div>
+            </div>
+
+            <!-- CTA -->
+            <router-link to="/api-connect"
+              class="inline-flex items-center gap-2 bg-white text-blue-800 font-semibold text-sm px-6 py-3 rounded-lg shadow-lg shadow-black/20 hover:bg-blue-50 transition-all duration-300">
+              <i class="fa-duotone fa-regular fa-paper-plane"></i>
+              Comenzar a enviar
+              <i class="fa-duotone fa-regular fa-arrow-right text-xs"></i>
+            </router-link>
+          </div>
+
+          <!-- Icono decorativo -->
+          <div class="hidden md:flex items-center justify-center">
+            <i class="fa-duotone fa-regular fa-paper-plane text-6xl text-white/10"></i>
+          </div>
+        </div>
+
+        <!-- Stats bar -->
+        <div class="flex items-center gap-6 mt-6 pt-6 border-t border-white/10">
+          <div class="text-center">
+            <div class="text-white font-bold text-lg">30s</div>
+            <div class="text-blue-300 text-[10px] uppercase tracking-wider">Entre envios</div>
+          </div>
+          <div class="text-center">
+            <div class="text-white font-bold text-lg"><i class="fa-duotone fa-regular fa-infinity text-sm"></i></div>
+            <div class="text-blue-300 text-[10px] uppercase tracking-wider">Contactos</div>
+          </div>
+          <div class="text-center">
+            <div class="text-white font-bold text-lg"><i class="fa-duotone fa-regular fa-bolt text-sm text-yellow-300"></i></div>
+            <div class="text-blue-300 text-[10px] uppercase tracking-wider">WebSocket</div>
+          </div>
+          <div class="text-center">
+            <div class="text-white font-bold text-lg"><i class="fa-duotone fa-regular fa-cloud text-sm"></i></div>
+            <div class="text-blue-300 text-[10px] uppercase tracking-wider">En la nube</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="grid gap-4">
       <div class="relative flex items-center justify-between rounded-md">
         <div class="fade absolute top-0 left-0 z-20 w-full h-full grid rejilla rounded-md">

@@ -1,19 +1,21 @@
 <script setup>
-import axios from "axios";
-import { ref } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 import { useRouter } from 'vue-router'
+import { useAutowat } from "@/composables/useAutowat";
 const router = useRouter()
+const { get } = useAutowat();
 
-const mostrar = ref(true)
 const qr = ref(false)
 const status = ref(false)
+let intervalo = null;
 
 const connect = async() => {
   try {
-    const { data } = await axios.get("https://auto.autowat.site/auth")
-    console.log(data.imagenQr)
+    const { data } = await get("/auth")
     qr.value = data.imagenQr
-    if(data.autenticado === true){
+    status.value = data.listo ? "Conectado" : data.autenticado ? "Autenticando..." : "Esperando QR..."
+    if(data.listo === true){
+      clearInterval(intervalo)
       router.push('/home-autowhat')
     }
   }catch(error){
@@ -21,9 +23,16 @@ const connect = async() => {
   }
 }
 
-setInterval(() => {
+onMounted(() => {
   connect()
-}, 3000);
+  intervalo = setInterval(() => {
+    connect()
+  }, 3000);
+})
+
+onUnmounted(() => {
+  if (intervalo) clearInterval(intervalo)
+})
 </script>
 
 <template>

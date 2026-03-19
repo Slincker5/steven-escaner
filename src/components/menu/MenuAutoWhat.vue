@@ -1,10 +1,15 @@
 <script setup>
+import { ref } from "vue";
+import { useRouter } from "vue-router";
 import { storeMenuAutowhat } from "@/store/storeMenuAutowhat";
 import { useMenuAutowhat } from "@/composables/useMenuAutowhat";
 import CerrarSesionWhatsapp from "@/components/CerrarSesionWhatsapp.vue";
 const menu = storeMenuAutowhat();
+const router = useRouter();
 const { photo, numero, nombre, logout, getInfo, log } =
   useMenuAutowhat();
+
+const rol = ref(localStorage.getItem("rol"));
 
 getInfo();
 </script>
@@ -16,7 +21,10 @@ getInfo();
       <div
         class="w-[90px] h-[90px] m-auto rounded-full shadow-md shadow-black/40 p-[2px] bg-white border border-solid border-[#ebebeb]"
       >
-        <img :src="photo" class="w-full block object-cover rounded-full" />
+        <img v-if="photo" :src="photo" class="w-full block object-cover rounded-full" />
+        <div v-else class="w-full h-full rounded-full bg-blue-600 flex items-center justify-center text-white text-3xl font-bold">
+          {{ nombre ? nombre.charAt(0).toUpperCase() : '?' }}
+        </div>
       </div>
       <div class="font-medium text-lg text-center p-4 pt-2 pb-1 truncate">
         {{ nombre }}
@@ -82,6 +90,15 @@ getInfo();
         >
           <i class="fa-jelly-duo fa-regular fa-list-ol"></i> Historial de
           enviados
+        </button>
+      </li>
+      <li v-if="rol === 'Admin'">
+        <button
+          class="w-full text-left block p-4 py-5 border-b border-solid border-[#e7e7e7] text-gray-700 text-sm hover:bg-gray-100 transition-colors"
+          @click="router.push('/admin')"
+        >
+          <i class="fa-duotone fa-regular fa-shield-halved"></i>
+          Administracion
         </button>
       </li>
       <li>

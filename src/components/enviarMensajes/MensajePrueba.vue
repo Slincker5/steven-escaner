@@ -1,14 +1,13 @@
 <script setup>
-import axios from "axios";
 import { ref, Transition } from "vue";
 import { storeEnvioAutomatizado } from "@/store/storeEnvioAutomatizado";
 import CargandoForm from "../globales/CargandoForm.vue";
+import { useAutowat } from "@/composables/useAutowat";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 
 const envioStore = storeEnvioAutomatizado();
-
-const API_HTTP = "https://auto.autowat.site";
+const { post } = useAutowat();
 const numero = ref("503");
 const sendTest = ref(false);
 const enviando = ref(false);
@@ -25,10 +24,7 @@ const enviar = async () => {
     if (!envioStore.packageMessage.imagenUrl) {
       envioStore.packageMessage.imagenUrl = envioStore.imagen;
     }
-    const { data } = await axios.post(
-      `${API_HTTP}${ruta}`,
-      envioStore.packageMessage,
-    );
+    const { data } = await post(ruta, envioStore.packageMessage);
     toast.success(
       `Mensaje de prueba enviado a ${envioStore.packageMessage.numero}`,
       {

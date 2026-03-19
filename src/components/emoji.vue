@@ -1,52 +1,35 @@
 <template>
-  <div class="border w-full bg-white rounded shadow">
-    <!-- Tabs estilo WhatsApp con imágenes -->
-    <div class="flex justify-between mb-3 bg-gray-200 p-4">
+  <div class="bg-gray-50 border-t border-gray-200">
+    <!-- Tabs -->
+    <div class="flex items-center gap-1 px-3 pt-2 pb-1 border-b border-gray-200">
       <button
         v-for="categoria in categoriasDisponibles"
         :key="categoria.nombre"
         @click="categoriaSeleccionada = categoria.nombre"
-        :class="[
-          'px-3 py-1 transition-transform relative group',
-          categoriaSeleccionada === categoria.nombre
-            ? 'opacity-100 scale-125'
-            : 'opacity-50 hover:opacity-80'
-        ]"
+        class="px-2.5 py-1.5 rounded-md text-sm transition-all relative group"
+        :class="categoriaSeleccionada === categoria.nombre
+          ? 'bg-white shadow-sm border border-gray-200'
+          : 'hover:bg-gray-100'"
       >
-        <img
-          :src="categoria.icono"
-          :alt="categoria.nombre"
-          class="w-6 h-6 object-contain"
-        />
-        <!-- Tooltip -->
-        <span
-          class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block 
-                 bg-gray-800 text-white text-xs rounded px-2 py-1 shadow-lg whitespace-nowrap z-50"
-        >
+        <img :src="categoria.icono" :alt="categoria.nombre" class="w-5 h-5 object-contain" />
+        <span class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block
+               bg-gray-700 text-white text-[10px] rounded px-2 py-1 shadow whitespace-nowrap z-50">
           {{ categoria.nombre }}
         </span>
       </button>
     </div>
 
-    <!-- Emojis con tooltips personalizados -->
-    <div class="flex flex-wrap gap-2 overflow-y-scroll max-h-52 w-full noscroll p-4 pt-1">
-      <div
+    <!-- Emojis grid -->
+    <div class="flex flex-wrap gap-1 overflow-y-auto max-h-44 p-3 noscroll">
+      <span
         v-for="emoji in emojisPorCategoria[categoriaSeleccionada]"
         :key="emoji.unicode + categoriaSeleccionada"
-        class="relative group"
-      >
-        <span
-          class="text-2xl cursor-pointer transition-transform hover:scale-125"
-          @click="copiarAlPortapapeles(emoji)"
-        >
-          {{ emoji.emoji }}
-        </span>
-        <div
-          class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block 
-                 bg-gray-800 text-white text-xs rounded px-2 py-1 shadow-lg z-50 whitespace-nowrap"
-        >
-          {{ emoji.label }}
-        </div>
+        class="text-xl cursor-pointer hover:bg-gray-200 rounded p-0.5 transition-colors"
+        :title="emoji.label"
+        @click="insertarEmoji(emoji)"
+      >{{ emoji.emoji }}</span>
+      <div v-if="!emojisPorCategoria[categoriaSeleccionada]?.length" class="text-gray-400 text-xs py-4 w-full text-center">
+        Sin emojis recientes
       </div>
     </div>
   </div>
@@ -55,11 +38,14 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
+import { storeMensajePersonalizado } from '@/store/storeMensajePersonalizado';
+
+const emit = defineEmits(['emoji-selected']);
+const mensajeStore = storeMensajePersonalizado();
 
 const categoriaSeleccionada = ref('🕘 Recientes');
 const emojisPorCategoria = ref({});
 
-// Asegúrate de tener las imágenes en /public/img/
 const categoriasDisponibles = [
   { nombre: '🕘 Recientes', icono: 'https://cdn.multimarcas.app/history.svg' },
   { nombre: '😀 Caritas', icono: 'https://cdn.multimarcas.app/smile.svg' },
@@ -87,7 +73,6 @@ function mapearCategoria(grupoId) {
 onMounted(async () => {
   try {
     const { data } = await axios.get('https://cdn.jsdelivr.net/npm/emojibase-data@latest/es/data.json');
-
     const grupos = {
       '🕘 Recientes': cargarRecientes(),
       '😀 Caritas': [],
@@ -95,40 +80,33 @@ onMounted(async () => {
       '💡 Objetos': [],
       '💬 Símbolos': [],
     };
-
     data.forEach((emoji) => {
       const categoria = mapearCategoria(emoji.group);
       if (categoria && grupos[categoria]) {
-        grupos[categoria].push({
-          emoji: emoji.emoji,
-          label: emoji.label,
-          unicode: emoji.hexcode,
-        });
+        grupos[categoria].push({ emoji: emoji.emoji, label: emoji.label, unicode: emoji.hexcode });
       }
     });
-
     emojisPorCategoria.value = grupos;
   } catch (error) {
     console.error('Error cargando emojis:', error);
   }
 });
 
-function copiarAlPortapapeles(emojiObj) {
-  navigator.clipboard.writeText(emojiObj.emoji);
+function insertarEmoji(emojiObj) {
+  emit('emoji-selected', emojiObj.emoji);
+  const textoActual = mensajeStore.textareaMensajePersonalizado || '';
+  const nuevoTexto = textoActual === 'Escribe tu mensaje' ? emojiObj.emoji : textoActual + emojiObj.emoji;
+  mensajeStore.cambiarTextareaMensajePersonalizado(nuevoTexto);
   guardarComoReciente(emojiObj);
 }
 
 function guardarComoReciente(emojiObj) {
-  const clave = 'emojisRecientes';
   const recientes = cargarRecientes();
-
-  const yaExiste = recientes.find(e => e.unicode === emojiObj.unicode);
-  if (!yaExiste) {
+  if (!recientes.find(e => e.unicode === emojiObj.unicode)) {
     recientes.unshift(emojiObj);
     if (recientes.length > 20) recientes.pop();
-    localStorage.setItem(clave, JSON.stringify(recientes));
+    localStorage.setItem('emojisRecientes', JSON.stringify(recientes));
   }
-
   emojisPorCategoria.value['🕘 Recientes'] = recientes;
 }
 
@@ -137,8 +115,8 @@ function cargarRecientes() {
   return data ? JSON.parse(data) : [];
 }
 </script>
-<style>
-.noscroll::-webkit-scrollbar {
-  display: none;              /* Chrome, Safari */
-}
+
+<style scoped>
+.noscroll::-webkit-scrollbar { display: none; }
+.noscroll { -ms-overflow-style: none; scrollbar-width: none; }
 </style>

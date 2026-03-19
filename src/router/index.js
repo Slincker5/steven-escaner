@@ -77,7 +77,7 @@ const router = createRouter({
     },
     {
       path: '/api-connect',
-      name: 'aprobacion',
+      name: 'api-connect',
       component: () => import('../views/WhatsappApiConnectView.vue'),
       meta: {
         requiresAuth: true,
@@ -91,6 +91,15 @@ const router = createRouter({
       meta: {
         requiresAuth: true,
         title: "AutoWhats | Inicio",
+      },
+    },
+    {
+      path: '/admin',
+      name: 'admin',
+      component: () => import('../views/AdminPanelView.vue'),
+      meta: {
+        requiresAuth: true,
+        title: "Panel de Administracion",
       },
     }
   ]
