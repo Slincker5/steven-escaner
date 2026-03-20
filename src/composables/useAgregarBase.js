@@ -49,7 +49,7 @@ export const useAgregarBase = () => {
     try {
       const { data } = await api.post(
         "https://steven.multimarcas.app/api/base/create",
-        clientes,
+        { base: clientes },
       );
       toast.success(data.message, {
         theme: "colored",
