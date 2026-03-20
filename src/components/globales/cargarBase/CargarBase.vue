@@ -221,13 +221,33 @@ const clearAllFilters = () => {
 };
 
 // --- Validation ---
-const hasInvalidNumber = (value) => value && /[^\d]/.test(value);
+const hasInvalidNumber = (value) => {
+  if (!value) return false;
+  const digits = String(value).replace(/\D/g, "");
+  if (!digits) return true;
+  // 8 dígitos SV sin código (2-9 inicio)
+  if (/^[2-9]\d{7}$/.test(digits)) return false;
+  // 11 dígitos con 503
+  if (digits.length === 11 && digits.startsWith("503") && /^[2-9]/.test(digits.substring(3))) return false;
+  // Otro código de país (10+ dígitos)
+  if (digits.length >= 10) return false;
+  return true;
+};
 const hasMissingName = (row) => !row.NOMBRE && !!row.NUMERO;
 
 const getCellValidation = (row, col) => {
   if (col.key === "NUMERO" && hasInvalidNumber(row[col.key])) return "error";
   if (col.key === "NOMBRE" && hasMissingName(row)) return "warning";
   return "";
+};
+
+// --- Format number preview ---
+const formatNumero = (value) => {
+  if (!value) return "";
+  const digits = String(value).replace(/\D/g, "");
+  if (/^[2-9]\d{7}$/.test(digits)) return "503" + digits;
+  if (digits.length === 11 && digits.startsWith("503")) return digits;
+  return digits;
 };
 
 // --- Data type badge ---
@@ -330,8 +350,20 @@ const handleSubir = async () => {
         fx
       </div>
       <!-- Value display -->
-      <div class="flex-1 px-2 text-gray-700 truncate">
-        {{ activeCellValue }}
+      <div class="flex-1 px-2 text-gray-700 truncate flex items-center gap-2">
+        <span>{{ activeCellValue }}</span>
+        <span
+          v-if="activeCell.col === 2 && activeCellValue && !hasInvalidNumber(activeCellValue)"
+          class="text-[10px] text-[#217346] font-medium"
+        >
+          <i class="fa-duotone fa-solid fa-phone text-[8px] mr-0.5"></i>{{ formatNumero(activeCellValue) }}@c.us
+        </span>
+        <span
+          v-if="activeCell.col === 2 && activeCellValue && hasInvalidNumber(activeCellValue)"
+          class="text-[10px] text-red-500 font-medium"
+        >
+          <i class="fa-sharp fa-solid fa-triangle-exclamation text-[8px] mr-0.5"></i>Número inválido
+        </span>
       </div>
     </div>
 

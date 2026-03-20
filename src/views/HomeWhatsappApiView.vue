@@ -11,12 +11,13 @@ const menu = storeMenuAutowhat();
 </script>
 
 <template>
-  <div class="migrid">
+  <div class="migrid" :class="menu.cargar_base ? 'grid-no-aside' : 'grid-with-aside'">
     <!-- MENU IZQUIERDO -->
     <MenuAutoWhat />
 
-    <!-- CONTENIDO PRINCIPAL (ocupa todo el espacio restante) -->
+    <!-- CONTENIDO CENTRAL -->
     <div class="relative flex flex-col min-h-0 h-screen bg-gray-50">
+      <!-- Cargar base: ocupa todo sin aside -->
       <Transition name="zoom">
         <div v-if="menu.cargar_base" class="flex-1 min-h-0 flex flex-col">
           <CargarBase />
@@ -26,7 +27,6 @@ const menu = storeMenuAutowhat();
       <Transition name="zoom">
         <div v-if="menu.enviar_mensajes" class="flex-1 min-h-0 overflow-y-auto">
           <CampoDeTexto />
-          <VistaHistoriaEnvios />
         </div>
       </Transition>
 
@@ -36,6 +36,20 @@ const menu = storeMenuAutowhat();
           class="flex-1 min-h-0 overflow-y-auto"
         >
           <MensajePersonalizado />
+        </div>
+      </Transition>
+    </div>
+
+    <!-- PANEL DERECHO (ASIDE) - Solo para enviar mensajes y mensajes personalizados -->
+    <div v-if="!menu.cargar_base" class="w-[400px] bg-white shadow-lg shadow-black/20 flex flex-col min-h-0">
+      <Transition name="zoom">
+        <div v-if="menu.enviar_mensajes" class="flex-1 min-h-0 overflow-y-auto">
+          <VistaHistoriaEnvios />
+        </div>
+      </Transition>
+
+      <Transition name="zoom">
+        <div v-if="menu.mensaje_personalizado" class="flex-1 min-h-0 overflow-y-auto">
           <Preview />
         </div>
       </Transition>
@@ -47,9 +61,16 @@ const menu = storeMenuAutowhat();
 .migrid {
   width: 100%;
   display: grid;
-  grid-template-columns: auto 1fr;
   height: 100vh;
   overflow: hidden;
+}
+
+.grid-no-aside {
+  grid-template-columns: auto 1fr;
+}
+
+.grid-with-aside {
+  grid-template-columns: auto 1fr auto;
 }
 
 /* Animación zoom */

@@ -21,7 +21,19 @@ export const useAgregarBase = () => {
 
   const limpiarNumero = (n) => {
     if (!n) return "";
-    return String(n).replace(/\D/g, "");
+    let digits = String(n).replace(/\D/g, "");
+
+    // Normalizar para El Salvador: 503 + 8 dígitos
+    // Si viene con 503 al inicio (11 dígitos), quitarlo
+    if (digits.length === 11 && digits.startsWith("503")) {
+      digits = digits.substring(3);
+    }
+    // Si son 8 dígitos válidos (empieza con 2-9), agregar 503
+    if (/^[2-9]\d{7}$/.test(digits)) {
+      return "503" + digits;
+    }
+    // Si ya tiene código de país válido, retornar tal cual
+    return digits;
   };
 
   const subirBaseAlServidor = async () => {
