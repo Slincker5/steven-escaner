@@ -4,6 +4,7 @@ import MenuAutoWhat from "@/components/menu/MenuAutoWhat.vue";
 import MensajePersonalizado from "@/components/mensajesPersonalizados/MensajePersonalizado.vue";
 import Preview from "@/components/Preview.vue";
 import CargarBase from "@/components/globales/cargarBase/CargarBase.vue";
+import VerBase from "@/components/globales/cargarBase/VerBase.vue";
 import VistaHistoriaEnvios from "@/components/enviarMensajes/vistaHistoriaEnvios.vue";
 import CampoDeTexto from "@/components/mensajesPersonalizados/CampoDeTexto.vue";
 
@@ -11,7 +12,7 @@ const menu = storeMenuAutowhat();
 </script>
 
 <template>
-  <div class="migrid" :class="menu.cargar_base ? 'grid-no-aside' : 'grid-with-aside'">
+  <div class="migrid" :class="menu.cargar_base || menu.ver_base ? 'grid-no-aside' : 'grid-with-aside'">
     <!-- MENU IZQUIERDO -->
     <MenuAutoWhat />
 
@@ -21,6 +22,13 @@ const menu = storeMenuAutowhat();
       <Transition name="zoom">
         <div v-if="menu.cargar_base" class="flex-1 min-h-0 flex flex-col">
           <CargarBase />
+        </div>
+      </Transition>
+
+      <!-- Ver base actual: ocupa todo sin aside -->
+      <Transition name="zoom">
+        <div v-if="menu.ver_base" class="flex-1 min-h-0 flex flex-col">
+          <VerBase />
         </div>
       </Transition>
 
@@ -41,7 +49,7 @@ const menu = storeMenuAutowhat();
     </div>
 
     <!-- PANEL DERECHO (ASIDE) - Solo para enviar mensajes y mensajes personalizados -->
-    <div v-if="!menu.cargar_base" class="w-[400px] bg-white shadow-lg shadow-black/20 flex flex-col min-h-0">
+    <div v-if="!menu.cargar_base && !menu.ver_base" class="w-[400px] bg-white shadow-lg shadow-black/20 flex flex-col min-h-0">
       <Transition name="zoom">
         <div v-if="menu.enviar_mensajes" class="flex-1 min-h-0 overflow-y-auto">
           <VistaHistoriaEnvios />

@@ -1,12 +1,13 @@
 <script setup>
-import { ref, computed, reactive, nextTick, onMounted, onBeforeUnmount, watch } from "vue";
+import { ref, computed, reactive, nextTick, onMounted, onBeforeUnmount } from "vue";
 import { storeCargarBase } from "@/store/storeCargarBase";
+import { storeMenuAutowhat } from "@/store/storeMenuAutowhat";
 import { useAgregarBase } from "@/composables/useAgregarBase";
-import api from "@/services/api";
 import { toast } from "vue3-toastify";
 
 const { subirBaseAlServidor, getBase } = useAgregarBase();
 const baseCargada = storeCargarBase();
+const menuStore = storeMenuAutowhat();
 
 // ── Column definitions ──
 const COLUMNS = [
@@ -28,7 +29,7 @@ const selectedCols = ref(new Set());
 const selectAll = ref(false);
 const sortConfig = reactive({ key: null, dir: "asc" });
 const cargando = ref(false);
-const activeTab = ref("editor"); // "editor" | "base"
+const activeTab = ref("editor");
 const searchQuery = ref("");
 const showSearch = ref(false);
 
@@ -42,10 +43,6 @@ COL_KEYS.forEach((k) => {
 });
 const openFilter = ref(null);
 
-// ── Server data for "Base cargada" tab ──
-const serverData = ref([]);
-const loadingServer = ref(false);
-const deletingBase = ref(false);
 
 // ── Helpers ──
 const isRowEmpty = (row) => !row.CLIENTE && !row.NOMBRE && !row.NUMERO && !row.FECHA;
@@ -512,55 +509,12 @@ const handleSubir = async () => {
   try {
     await subirBaseAlServidor();
     clearAll();
-    activeTab.value = "base";
-    loadServerData();
+    menuStore.verBase(true);
   } finally {
     cargando.value = false;
   }
 };
 
-// ── Server data (Base cargada tab) ──
-const loadServerData = async () => {
-  loadingServer.value = true;
-  try {
-    const { data } = await api.get("https://steven.multimarcas.app/api/base/list");
-    serverData.value = Array.isArray(data) ? data : [];
-  } catch (error) {
-    console.error("Error cargando base:", error);
-    serverData.value = [];
-  } finally {
-    loadingServer.value = false;
-  }
-};
-
-const eliminarBase = async () => {
-  if (!confirm("¿Estás seguro de eliminar toda la base cargada?")) return;
-  deletingBase.value = true;
-  try {
-    const { data } = await api.delete("https://steven.multimarcas.app/api/base/delete");
-    toast.success(data.message || "Base eliminada", {
-      theme: "colored",
-      autoClose: 1500,
-      position: toast.POSITION.BOTTOM_LEFT,
-      transition: toast.TRANSITIONS.ZOOM,
-    });
-    serverData.value = [];
-  } catch (error) {
-    console.error("Error eliminando base:", error);
-    toast.error("Error al eliminar la base", {
-      theme: "colored",
-      autoClose: 2000,
-      position: toast.POSITION.BOTTOM_LEFT,
-    });
-  } finally {
-    deletingBase.value = false;
-  }
-};
-
-// ── Tab switching ──
-watch(activeTab, (tab) => {
-  if (tab === "base") loadServerData();
-});
 
 // ── Global click to close menus ──
 const onGlobalClick = (e) => {
@@ -588,8 +542,6 @@ onBeforeUnmount(() => {
   document.removeEventListener("keydown", onGlobalKeydown);
 });
 
-// helper for server data field access
-const getField = (row, upper, lower, fallback = "") => row[upper] ?? row[lower] ?? fallback;
 </script>
 
 <template>
@@ -924,67 +876,6 @@ const getField = (row, upper, lower, fallback = "") => row[upper] ?? row[lower] 
       </table>
     </div>
 
-    <!-- ════════════ BASE CARGADA TAB ════════════ -->
-    <div v-if="activeTab === 'base'" class="flex-1 overflow-auto bg-white">
-      <!-- Toolbar for base tab -->
-      <div class="bg-[#f6f6f6] border-b border-[#e0e0e0] px-3 py-2 flex items-center justify-between flex-shrink-0">
-        <div class="flex items-center gap-2">
-          <i class="fa-solid fa-database text-[#217346] text-sm"></i>
-          <span class="text-[13px] font-semibold text-[#333]">Base cargada en servidor</span>
-          <span class="text-[11px] text-gray-500">({{ serverData.length }} registros)</span>
-        </div>
-        <button
-          v-if="serverData.length > 0"
-          @click="eliminarBase"
-          :disabled="deletingBase"
-          class="flex items-center gap-1.5 bg-red-500 hover:bg-red-600 text-white text-xs px-3 py-1 rounded-[3px] transition-colors disabled:opacity-50"
-        >
-          <i class="fa-solid fa-trash-can text-[11px]"></i>
-          <span>{{ deletingBase ? 'Eliminando...' : 'Eliminar base' }}</span>
-        </button>
-      </div>
-
-      <!-- Loading -->
-      <div v-if="loadingServer" class="flex items-center justify-center py-12">
-        <i class="fa-solid fa-rotate fa-spin text-[#217346] text-2xl"></i>
-      </div>
-
-      <!-- Empty state -->
-      <div v-else-if="serverData.length === 0" class="flex flex-col items-center justify-center py-12 text-gray-400">
-        <i class="fa-solid fa-database text-4xl mb-3"></i>
-        <span class="text-sm">No hay base cargada en el servidor</span>
-      </div>
-
-      <!-- Server data table (read-only, Excel-style) -->
-      <table v-else class="border-collapse min-w-[650px] text-[13px] font-['Calibri',_sans-serif]" style="table-layout: fixed; width: 100%;">
-        <colgroup>
-          <col style="width: 40px;" />
-          <col style="width: auto;" />
-          <col style="width: auto;" />
-          <col style="width: auto;" />
-          <col style="width: auto;" />
-        </colgroup>
-        <thead class="sticky top-0 z-10">
-          <tr>
-            <th class="bg-[#e6e6e6] border-b border-r border-[#bfbfbf] text-[11px] font-normal text-[#888]" style="height: 22px;"></th>
-            <th class="bg-[#e6e6e6] border-b border-r border-[#bfbfbf] text-[11px] font-medium text-[#333]" style="height: 22px;">A - CLIENTE</th>
-            <th class="bg-[#e6e6e6] border-b border-r border-[#bfbfbf] text-[11px] font-medium text-[#333]" style="height: 22px;">B - NOMBRE</th>
-            <th class="bg-[#e6e6e6] border-b border-r border-[#bfbfbf] text-[11px] font-medium text-[#333]" style="height: 22px;">C - NUMERO</th>
-            <th class="bg-[#e6e6e6] border-b border-r border-[#bfbfbf] text-[11px] font-medium text-[#333]" style="height: 22px;">D - FECHA</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(row, i) in serverData" :key="i" class="hover:bg-[#f5f5f5]">
-            <td class="bg-[#f9f9f9] border-b border-r border-[#d4d4d4] text-center text-[11px] text-[#888]" style="height: 22px;">{{ i + 1 }}</td>
-            <td class="border-b border-r border-[#d4d4d4] px-1 text-[13px] text-[#333]" style="height: 22px;">{{ getField(row, 'CLIENTE', 'cliente') }}</td>
-            <td class="border-b border-r border-[#d4d4d4] px-1 text-[13px] text-[#333]" style="height: 22px;">{{ getField(row, 'NOMBRE', 'nombre') }}</td>
-            <td class="border-b border-r border-[#d4d4d4] px-1 text-[13px] text-[#333]" style="height: 22px;">{{ getField(row, 'NUMERO', 'numero') }}</td>
-            <td class="border-b border-r border-[#d4d4d4] px-1 text-[13px] text-[#333]" style="height: 22px;">{{ getField(row, 'FECHA', 'fecha') }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
     <!-- ════════════ CONTEXT MENU ════════════ -->
     <Teleport to="body">
       <div
@@ -1083,26 +974,10 @@ const getField = (row, upper, lower, fallback = "") => row[upper] ?? row[lower] 
 
       <!-- Editor tab -->
       <div
-        @click="activeTab = 'editor'"
-        class="px-3 py-0.5 text-[11px] cursor-pointer border border-[#bfbfbf] rounded-t-sm -mb-px transition-colors"
-        :class="activeTab === 'editor'
-          ? 'bg-white border-b-white text-[#333] font-medium'
-          : 'bg-[#e6e6e6] text-[#666] hover:bg-[#d9d9d9]'"
+        class="px-3 py-0.5 text-[11px] cursor-default border border-[#bfbfbf] rounded-t-sm -mb-px bg-white border-b-white text-[#333] font-medium"
       >
         <i class="fa-solid fa-file-spreadsheet text-[#217346] text-[10px] mr-1"></i>
         Editor
-      </div>
-
-      <!-- Base cargada tab -->
-      <div
-        @click="activeTab = 'base'"
-        class="px-3 py-0.5 text-[11px] cursor-pointer border border-[#bfbfbf] rounded-t-sm -mb-px transition-colors"
-        :class="activeTab === 'base'
-          ? 'bg-white border-b-white text-[#333] font-medium'
-          : 'bg-[#e6e6e6] text-[#666] hover:bg-[#d9d9d9]'"
-      >
-        <i class="fa-solid fa-database text-[#217346] text-[10px] mr-1"></i>
-        Base cargada
       </div>
     </div>
 
