@@ -598,7 +598,7 @@ const getField = (row, upper, lower, fallback = "") => row[upper] ?? row[lower] 
     <!-- ════════════ TITLE BAR ════════════ -->
     <div class="bg-[#217346] px-4 py-1.5 flex items-center justify-between flex-shrink-0">
       <div class="flex items-center gap-2">
-        <i class="fa-duotone fa-solid fa-file-spreadsheet text-white/90 text-base"></i>
+        <i class="fa-solid fa-file-spreadsheet text-white/90 text-base"></i>
         <span class="text-white font-semibold text-sm tracking-wide">Cargar Base</span>
         <span class="text-white/60 text-xs ml-2" v-if="activeTab === 'editor'">{{ filledRows.length }} filas con datos</span>
       </div>
@@ -608,7 +608,7 @@ const getField = (row, upper, lower, fallback = "") => row[upper] ?? row[lower] 
         :disabled="cargando"
         class="flex items-center gap-1.5 bg-white/20 hover:bg-white/30 text-white text-xs px-3 py-1 rounded-[3px] transition-colors disabled:opacity-50 border border-white/30"
       >
-        <i class="fa-duotone fa-solid fa-cloud-arrow-up text-[12px]"></i>
+        <i class="fa-solid fa-cloud-arrow-up text-[12px]"></i>
         <span>{{ cargando ? 'Subiendo...' : `Subir base (${validRows.length})` }}</span>
       </button>
     </div>
@@ -625,7 +625,7 @@ const getField = (row, upper, lower, fallback = "") => row[upper] ?? row[lower] 
         <!-- Grupo: Portapapeles -->
         <div class="ribbon-group">
           <button class="ribbon-btn-large" @click="() => {}">
-            <i class="fa-duotone fa-solid fa-paste text-[18px] text-[#217346]"></i>
+            <i class="fa-sharp fa-regular fa-paste text-[18px] text-[#217346]"></i>
             <span class="ribbon-btn-label">Pegar</span>
           </button>
           <div class="ribbon-group-label">Portapapeles</div>
@@ -637,7 +637,7 @@ const getField = (row, upper, lower, fallback = "") => row[upper] ?? row[lower] 
         <div class="ribbon-group">
           <div class="flex flex-col gap-0.5">
             <button class="ribbon-btn-small" @click="addRows(5)" title="Insertar 5 filas al final">
-              <i class="fa-sharp fa-solid fa-plus text-[10px] text-[#217346]"></i>
+              <i class="fa-sharp fa-regular fa-plus text-[10px] text-[#217346]"></i>
               <span>Insertar filas</span>
             </button>
             <button
@@ -647,7 +647,7 @@ const getField = (row, upper, lower, fallback = "") => row[upper] ?? row[lower] 
               @click="deleteSelectedRows"
               title="Eliminar filas seleccionadas"
             >
-              <i class="fa-sharp fa-solid fa-trash-can text-[10px] text-red-500"></i>
+              <i class="fa-sharp fa-regular fa-trash-can text-[10px] text-red-500"></i>
               <span>Eliminar filas</span>
             </button>
           </div>
@@ -660,11 +660,11 @@ const getField = (row, upper, lower, fallback = "") => row[upper] ?? row[lower] 
         <div class="ribbon-group">
           <div class="flex flex-col gap-0.5">
             <button class="ribbon-btn-small" @click="clearAll" title="Limpiar todo el editor">
-              <i class="fa-sharp fa-solid fa-broom-wide text-[10px] text-orange-500"></i>
+              <i class="fa-sharp fa-regular fa-broom text-[10px] text-orange-500"></i>
               <span>Limpiar todo</span>
             </button>
             <button class="ribbon-btn-small" @click="showSearch = !showSearch" title="Buscar en la tabla">
-              <i class="fa-sharp fa-solid fa-magnifying-glass text-[10px] text-blue-500"></i>
+              <i class="fa-sharp fa-regular fa-magnifying-glass text-[10px] text-blue-500"></i>
               <span>Buscar</span>
             </button>
           </div>
@@ -677,11 +677,11 @@ const getField = (row, upper, lower, fallback = "") => row[upper] ?? row[lower] 
         <div class="ribbon-group">
           <div class="flex flex-col gap-0.5">
             <button class="ribbon-btn-small" @click="sortAZ" title="Ordenar de A a Z">
-              <i class="fa-sharp fa-solid fa-arrow-down-a-z text-[10px] text-[#217346]"></i>
+              <i class="fa-sharp fa-regular fa-arrow-up-a-z text-[10px] text-[#217346]"></i>
               <span>Ordenar A-Z</span>
             </button>
             <button class="ribbon-btn-small" @click="sortZA" title="Ordenar de Z a A">
-              <i class="fa-sharp fa-solid fa-arrow-down-z-a text-[10px] text-[#217346]"></i>
+              <i class="fa-sharp fa-regular fa-arrow-down-z-a text-[10px] text-[#217346]"></i>
               <span>Ordenar Z-A</span>
             </button>
           </div>
@@ -693,7 +693,7 @@ const getField = (row, upper, lower, fallback = "") => row[upper] ?? row[lower] 
 
     <!-- ════════════ SEARCH BAR ════════════ -->
     <div v-if="showSearch && activeTab === 'editor'" class="bg-[#f9f9f9] border-b border-[#e0e0e0] px-3 py-1.5 flex items-center gap-2 flex-shrink-0">
-      <i class="fa-sharp fa-solid fa-magnifying-glass text-[11px] text-gray-400"></i>
+      <i class="fa-solid fa-magnifying-glass text-[11px] text-gray-400"></i>
       <input
         v-model="searchQuery"
         type="text"
@@ -701,7 +701,7 @@ const getField = (row, upper, lower, fallback = "") => row[upper] ?? row[lower] 
         class="flex-1 bg-white border border-[#d4d4d4] rounded-sm px-2 py-1 text-[12px] outline-none focus:border-[#0078d4]"
       />
       <button @click="showSearch = false; searchQuery = ''" class="text-gray-400 hover:text-gray-600 text-xs">
-        <i class="fa-sharp fa-solid fa-xmark"></i>
+        <i class="fa-solid fa-xmark"></i>
       </button>
     </div>
 
@@ -782,7 +782,7 @@ const getField = (row, upper, lower, fallback = "") => row[upper] ?? row[lower] 
                   :class="{ 'text-[#217346]': columnFilters[col.key].active }"
                   title="Filtrar"
                 >
-                  <i :class="columnFilters[col.key].active ? 'fa-sharp fa-solid fa-filter' : 'fa-sharp fa-regular fa-chevron-down'" class="text-[9px]"></i>
+                  <i :class="columnFilters[col.key].active ? 'fa-solid fa-filter' : 'fa-solid fa-chevron-down'" class="text-[9px]"></i>
                 </button>
               </div>
 
@@ -929,7 +929,7 @@ const getField = (row, upper, lower, fallback = "") => row[upper] ?? row[lower] 
       <!-- Toolbar for base tab -->
       <div class="bg-[#f6f6f6] border-b border-[#e0e0e0] px-3 py-2 flex items-center justify-between flex-shrink-0">
         <div class="flex items-center gap-2">
-          <i class="fa-duotone fa-solid fa-database text-[#217346] text-sm"></i>
+          <i class="fa-solid fa-database text-[#217346] text-sm"></i>
           <span class="text-[13px] font-semibold text-[#333]">Base cargada en servidor</span>
           <span class="text-[11px] text-gray-500">({{ serverData.length }} registros)</span>
         </div>
@@ -939,19 +939,19 @@ const getField = (row, upper, lower, fallback = "") => row[upper] ?? row[lower] 
           :disabled="deletingBase"
           class="flex items-center gap-1.5 bg-red-500 hover:bg-red-600 text-white text-xs px-3 py-1 rounded-[3px] transition-colors disabled:opacity-50"
         >
-          <i class="fa-sharp fa-solid fa-trash-can text-[11px]"></i>
+          <i class="fa-solid fa-trash-can text-[11px]"></i>
           <span>{{ deletingBase ? 'Eliminando...' : 'Eliminar base' }}</span>
         </button>
       </div>
 
       <!-- Loading -->
       <div v-if="loadingServer" class="flex items-center justify-center py-12">
-        <i class="fa-duotone fa-solid fa-spinner-third fa-spin text-[#217346] text-2xl"></i>
+        <i class="fa-solid fa-rotate fa-spin text-[#217346] text-2xl"></i>
       </div>
 
       <!-- Empty state -->
       <div v-else-if="serverData.length === 0" class="flex flex-col items-center justify-center py-12 text-gray-400">
-        <i class="fa-duotone fa-solid fa-inbox text-4xl mb-3"></i>
+        <i class="fa-solid fa-database text-4xl mb-3"></i>
         <span class="text-sm">No hay base cargada en el servidor</span>
       </div>
 
@@ -994,15 +994,15 @@ const getField = (row, upper, lower, fallback = "") => row[upper] ?? row[lower] 
         @click.stop
       >
         <button class="ctx-item" @click="insertRowAt(contextMenu.rowIdx, 'above'); closeContextMenu()">
-          <i class="fa-sharp fa-solid fa-arrow-up text-[10px] w-4 text-center text-gray-500"></i>
+          <i class="fa-solid fa-arrow-up-from-line text-[10px] w-4 text-center text-gray-500"></i>
           <span>Insertar fila arriba</span>
         </button>
         <button class="ctx-item" @click="insertRowAt(contextMenu.rowIdx, 'below'); closeContextMenu()">
-          <i class="fa-sharp fa-solid fa-arrow-down text-[10px] w-4 text-center text-gray-500"></i>
+          <i class="fa-solid fa-arrow-down-from-line text-[10px] w-4 text-center text-gray-500"></i>
           <span>Insertar fila abajo</span>
         </button>
         <button class="ctx-item" @click="removeRow(contextMenu.rowIdx); closeContextMenu()">
-          <i class="fa-sharp fa-solid fa-trash-can text-[10px] w-4 text-center text-red-400"></i>
+          <i class="fa-solid fa-trash-can text-[10px] w-4 text-center text-red-400"></i>
           <span>Eliminar fila</span>
         </button>
         <button
@@ -1011,7 +1011,7 @@ const getField = (row, upper, lower, fallback = "") => row[upper] ?? row[lower] 
           :disabled="selectedRows.size === 0"
           @click="deleteSelectedRows(); closeContextMenu()"
         >
-          <i class="fa-sharp fa-solid fa-trash-list text-[10px] w-4 text-center text-red-400"></i>
+          <i class="fa-solid fa-trash-can text-[10px] w-4 text-center text-red-400"></i>
           <span>Eliminar filas seleccionadas ({{ selectedRows.size }})</span>
         </button>
 
@@ -1019,11 +1019,11 @@ const getField = (row, upper, lower, fallback = "") => row[upper] ?? row[lower] 
         <div class="my-1 border-t border-[#e0e0e0]"></div>
 
         <button class="ctx-item opacity-40 cursor-not-allowed" disabled>
-          <i class="fa-sharp fa-solid fa-columns-3 text-[10px] w-4 text-center text-gray-400"></i>
+          <i class="fa-solid fa-table text-[10px] w-4 text-center text-gray-400"></i>
           <span>Insertar columna</span>
         </button>
         <button class="ctx-item opacity-40 cursor-not-allowed" disabled>
-          <i class="fa-sharp fa-solid fa-table-columns text-[10px] w-4 text-center text-gray-400"></i>
+          <i class="fa-solid fa-table text-[10px] w-4 text-center text-gray-400"></i>
           <span>Eliminar columna</span>
         </button>
 
@@ -1031,7 +1031,7 @@ const getField = (row, upper, lower, fallback = "") => row[upper] ?? row[lower] 
         <div class="my-1 border-t border-[#e0e0e0]"></div>
 
         <button class="ctx-item" @click="clearCellContent(contextMenu.rowIdx, contextMenu.colIdx); closeContextMenu()">
-          <i class="fa-sharp fa-solid fa-eraser text-[10px] w-4 text-center text-orange-400"></i>
+          <i class="fa-solid fa-eraser text-[10px] w-4 text-center text-orange-400"></i>
           <span>Limpiar contenido de celda</span>
         </button>
         <button
@@ -1040,7 +1040,7 @@ const getField = (row, upper, lower, fallback = "") => row[upper] ?? row[lower] 
           :disabled="selectedRows.size === 0"
           @click="clearSelectedRowsContent(); closeContextMenu()"
         >
-          <i class="fa-sharp fa-solid fa-broom text-[10px] w-4 text-center text-orange-400"></i>
+          <i class="fa-solid fa-broom text-[10px] w-4 text-center text-orange-400"></i>
           <span>Limpiar contenido de filas seleccionadas</span>
         </button>
       </div>
@@ -1052,7 +1052,7 @@ const getField = (row, upper, lower, fallback = "") => row[upper] ?? row[lower] 
         <span>Filas: {{ filledRows.length }}</span>
         <span v-if="selectionCount > 0" class="text-white/80">Seleccionadas: {{ selectionCount }}</span>
         <span v-if="hasActiveFilters" class="text-yellow-200">
-          <i class="fa-sharp fa-solid fa-filter text-[9px] mr-0.5"></i> Filtro activo
+          <i class="fa-solid fa-filter text-[9px] mr-0.5"></i> Filtro activo
         </span>
       </div>
       <div class="flex items-center gap-4 text-white/80">
@@ -1068,8 +1068,8 @@ const getField = (row, upper, lower, fallback = "") => row[upper] ?? row[lower] 
     <div class="bg-[#e6e6e6] border-t border-[#bfbfbf] flex items-center px-1 py-0 gap-0 flex-shrink-0" style="height: 26px;">
       <!-- Nav arrows -->
       <div class="flex items-center gap-0 mr-1">
-        <button class="text-gray-500 hover:text-[#333] px-1 py-0.5 text-[10px]"><i class="fa-sharp fa-solid fa-chevron-left"></i></button>
-        <button class="text-gray-500 hover:text-[#333] px-1 py-0.5 text-[10px]"><i class="fa-sharp fa-solid fa-chevron-right"></i></button>
+        <button class="text-gray-500 hover:text-[#333] px-1 py-0.5 text-[10px]"><i class="fa-solid fa-chevron-left"></i></button>
+        <button class="text-gray-500 hover:text-[#333] px-1 py-0.5 text-[10px]"><i class="fa-solid fa-chevron-right"></i></button>
       </div>
 
       <!-- Add rows button -->
@@ -1078,7 +1078,7 @@ const getField = (row, upper, lower, fallback = "") => row[upper] ?? row[lower] 
         class="text-gray-500 hover:text-[#217346] px-1.5 py-0.5 transition-colors mr-1"
         title="Agregar 5 filas"
       >
-        <i class="fa-sharp fa-solid fa-plus text-[10px]"></i>
+        <i class="fa-solid fa-plus text-[10px]"></i>
       </button>
 
       <!-- Editor tab -->
@@ -1089,7 +1089,7 @@ const getField = (row, upper, lower, fallback = "") => row[upper] ?? row[lower] 
           ? 'bg-white border-b-white text-[#333] font-medium'
           : 'bg-[#e6e6e6] text-[#666] hover:bg-[#d9d9d9]'"
       >
-        <i class="fa-duotone fa-solid fa-file-spreadsheet text-[#217346] text-[10px] mr-1"></i>
+        <i class="fa-solid fa-file-spreadsheet text-[#217346] text-[10px] mr-1"></i>
         Editor
       </div>
 
@@ -1101,7 +1101,7 @@ const getField = (row, upper, lower, fallback = "") => row[upper] ?? row[lower] 
           ? 'bg-white border-b-white text-[#333] font-medium'
           : 'bg-[#e6e6e6] text-[#666] hover:bg-[#d9d9d9]'"
       >
-        <i class="fa-duotone fa-solid fa-database text-[#217346] text-[10px] mr-1"></i>
+        <i class="fa-solid fa-database text-[#217346] text-[10px] mr-1"></i>
         Base cargada
       </div>
     </div>
