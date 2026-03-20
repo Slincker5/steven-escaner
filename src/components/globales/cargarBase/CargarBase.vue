@@ -1,13 +1,18 @@
 <script setup>
 import { ref, computed, reactive, nextTick, onMounted, onBeforeUnmount } from "vue";
 import { storeCargarBase } from "@/store/storeCargarBase";
-import { storeMenuAutowhat } from "@/store/storeMenuAutowhat";
 import { useAgregarBase } from "@/composables/useAgregarBase";
 import { toast } from "vue3-toastify";
+import api from "@/services/api";
+import VerBase from "@/components/globales/cargarBase/VerBase.vue";
 
 const { subirBaseAlServidor, getBase } = useAgregarBase();
 const baseCargada = storeCargarBase();
-const menuStore = storeMenuAutowhat();
+
+// Cargar base del servidor al montar (para que enviar mensajes tenga los datos)
+onMounted(async () => {
+  await getBase();
+});
 
 // ── Column definitions ──
 const COLUMNS = [
@@ -95,15 +100,15 @@ const filledRows = computed(() => rows.value.filter((r) => !isRowEmpty(r)));
 const validRows = computed(() => rows.value.filter((r) => hasValidNumber(r)));
 const hasActiveFilters = computed(() => COL_KEYS.some((k) => columnFilters[k].active));
 
-// ── Sync to store ──
+// ── Sync editor data for upload (stored locally, not in global store) ──
+const editorData = ref([]);
 const syncStore = () => {
-  const data = filledRows.value.map((r) => ({
+  editorData.value = filledRows.value.map((r) => ({
     CLIENTE: String(r.CLIENTE || "").padStart(8, "0"),
     NOMBRE: r.NOMBRE,
     NUMERO: r.NUMERO,
     FECHA: r.FECHA,
   }));
-  baseCargada.editarBase(data);
 };
 
 // ── Selection helpers ──
@@ -243,7 +248,6 @@ const insertRowAt = (index, position = "below") => {
 
 const clearAll = () => {
   rows.value = Array.from({ length: INITIAL_ROWS }, createEmptyRow);
-  baseCargada.editarBase([]);
   clearSelection();
   activeCell.row = 0;
   activeCell.col = 0;
@@ -507,9 +511,14 @@ const handleSubir = async () => {
   if (validRows.value.length === 0) return;
   cargando.value = true;
   try {
+    // Temporalmente poner datos del editor en el store para que subirBaseAlServidor los lea
+    const backupBase = [...baseCargada.base];
+    baseCargada.editarBase(editorData.value);
     await subirBaseAlServidor();
     clearAll();
-    menuStore.verBase(true);
+    // Recargar la base real del servidor al store
+    await getBase();
+    activeTab.value = "base";
   } finally {
     cargando.value = false;
   }
@@ -550,9 +559,10 @@ onBeforeUnmount(() => {
     <!-- ════════════ TITLE BAR ════════════ -->
     <div class="bg-[#217346] px-4 py-1.5 flex items-center justify-between flex-shrink-0">
       <div class="flex items-center gap-2">
-        <i class="fa-solid fa-file-spreadsheet text-white/90 text-base"></i>
-        <span class="text-white font-semibold text-sm tracking-wide">Cargar Base</span>
+        <i :class="activeTab === 'editor' ? 'fa-solid fa-file-spreadsheet' : 'fa-solid fa-database'" class="text-white/90 text-base"></i>
+        <span class="text-white font-semibold text-sm tracking-wide">{{ activeTab === 'editor' ? 'Cargar Base' : 'Base de Clientes' }}</span>
         <span class="text-white/60 text-xs ml-2" v-if="activeTab === 'editor'">{{ filledRows.length }} filas con datos</span>
+        <span class="text-white/60 text-xs ml-2" v-if="activeTab === 'base'">{{ baseCargada.base.length }} registros</span>
       </div>
       <button
         v-if="validRows.length > 0 && activeTab === 'editor'"
@@ -876,6 +886,11 @@ onBeforeUnmount(() => {
       </table>
     </div>
 
+    <!-- ════════════ VER BASE TAB ════════════ -->
+    <div v-if="activeTab === 'base'" class="flex-1 overflow-auto bg-white">
+      <VerBase />
+    </div>
+
     <!-- ════════════ CONTEXT MENU ════════════ -->
     <Teleport to="body">
       <div
@@ -974,10 +989,22 @@ onBeforeUnmount(() => {
 
       <!-- Editor tab -->
       <div
-        class="px-3 py-0.5 text-[11px] cursor-default border border-[#bfbfbf] rounded-t-sm -mb-px bg-white border-b-white text-[#333] font-medium"
+        @click="activeTab = 'editor'"
+        class="px-3 py-0.5 text-[11px] cursor-pointer border border-[#bfbfbf] rounded-t-sm -mb-px"
+        :class="activeTab === 'editor' ? 'bg-white border-b-white text-[#333] font-medium' : 'bg-[#d9d9d9] text-gray-600 hover:bg-[#e6e6e6]'"
       >
         <i class="fa-solid fa-file-spreadsheet text-[#217346] text-[10px] mr-1"></i>
         Editor
+      </div>
+
+      <!-- Ver base tab -->
+      <div
+        @click="activeTab = 'base'; getBase()"
+        class="px-3 py-0.5 text-[11px] cursor-pointer border border-[#bfbfbf] rounded-t-sm -mb-px"
+        :class="activeTab === 'base' ? 'bg-white border-b-white text-[#333] font-medium' : 'bg-[#d9d9d9] text-gray-600 hover:bg-[#e6e6e6]'"
+      >
+        <i class="fa-solid fa-database text-blue-500 text-[10px] mr-1"></i>
+        Ver base ({{ baseCargada.base.length }})
       </div>
     </div>
 

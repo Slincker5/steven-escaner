@@ -59,19 +59,6 @@ getInfo();
       </li>
       <li>
         <button
-          class="w-full text-left block p-4 py-5 border-b border-solid border-[#e7e7e7] transition duration-500"
-          :class="
-            menu.ver_base
-              ? 'bg-blue-50 text-gray-900 text-sm hover:bg-gray-100'
-              : 'bg-white text-gray-700 text-sm hover:bg-gray-50'
-          "
-          @click="menu.verBase(true)"
-        >
-          <i class="fa-solid fa-database"></i> Ver base actual
-        </button>
-      </li>
-      <li>
-        <button
           class="w-full text-left block p-4 py-5 border-b border-solid border-[#e7e7e7] text-gray-700 text-sm hover:bg-gray-100 transition duration-500"
           :class="
             menu.mensaje_personalizado
