@@ -1,36 +1,35 @@
 <script setup>
-import { ref } from 'vue'
-import axios from "axios"
+import { ref, onMounted, onUnmounted } from 'vue'
+import api from "@/services/api"
 import { useGetRoutes } from "@/composables/getRoutes";
 const rol = ref(localStorage.getItem("rol"))
 
-const token = ref(localStorage.getItem("token"))
 const verificado = ref('')
 const username = ref(localStorage.getItem("username"))
 
 
 const { userProfile } = useGetRoutes();
+let intervalo = null;
 
 const getProfile = async() => {
   try {
-    const headers = {
-      Authorization: "Bearer " + token.value,
-      "Content-Type": "application/json",
-    };
-
-    const { data } = await axios.get(userProfile, {
-      headers
-    })
+    const { data } = await api.get(userProfile)
     verificado.value = data[0].verificado
   }catch(error){
     console.error(error)
   }
 }
-getProfile()
 
-setInterval(() => {
+onMounted(() => {
   getProfile()
-}, 5000)
+  intervalo = setInterval(() => {
+    getProfile()
+  }, 5000)
+})
+
+onUnmounted(() => {
+  if (intervalo) clearInterval(intervalo)
+})
 </script>
 
 <template>

@@ -1,6 +1,6 @@
 <script setup>
-import { ref, onMounted } from "vue";
-import axios from "axios";
+import { ref, onMounted, onUnmounted } from "vue";
+import api from "@/services/api";
 import { useGetRoutes } from "@/composables/getRoutes";
 import { useAutowat } from "@/composables/useAutowat";
 import { toast } from "vue3-toastify";
@@ -8,9 +8,6 @@ import "vue3-toastify/dist/index.css";
 
 const { url } = useGetRoutes();
 const { get: autowatGet, post: autowatPost } = useAutowat();
-
-const token = ref(localStorage.getItem("token"));
-const headers = { Authorization: "Bearer " + token.value, "Content-Type": "application/json" };
 
 const usuarios = ref([]);
 const sesiones = ref([]);
@@ -26,7 +23,7 @@ const passUser = ref({ usuario: "", password: "" });
 
 const cargarUsuarios = async () => {
   try {
-    const { data } = await axios.get(`${url}/api/admin/users`, { headers });
+    const { data } = await api.get(`${url}/api/admin/users`);
     usuarios.value = Array.isArray(data) ? data : [];
   } catch (e) { console.log(e); }
 };
@@ -39,20 +36,20 @@ const cargarSesiones = async () => {
 };
 
 const aprobar = async (uuid) => {
-  const { data } = await axios.post(`${url}/api/admin/approve-user`, { usuario: uuid }, { headers });
+  const { data } = await api.post(`${url}/api/admin/approve-user`, { usuario: uuid });
   showToast(data.message);
   cargarUsuarios();
 };
 
 const bloquear = async (uuid) => {
-  const { data } = await axios.post(`${url}/api/admin/user/block`, { usuario: uuid }, { headers });
+  const { data } = await api.post(`${url}/api/admin/user/block`, { usuario: uuid });
   showToast(data.message);
   cargarUsuarios();
 };
 
 const eliminar = async (uuid) => {
   if (!confirm("Seguro que quieres eliminar este usuario?")) return;
-  const { data } = await axios.delete(`${url}/api/admin/user/delete`, { headers, data: { usuario: uuid } });
+  const { data } = await api.delete(`${url}/api/admin/user/delete`, { data: { usuario: uuid } });
   showToast(data.message);
   cargarUsuarios();
 };
@@ -63,7 +60,7 @@ const abrirEditar = (user) => {
 };
 
 const guardarEditar = async () => {
-  const { data } = await axios.put(`${url}/api/admin/user/edit`, editUser.value, { headers });
+  const { data } = await api.put(`${url}/api/admin/user/edit`, editUser.value);
   showToast(data.message);
   modalEditar.value = false;
   cargarUsuarios();
@@ -79,14 +76,14 @@ const guardarPassword = async () => {
     showToast("Minimo 8 caracteres", true);
     return;
   }
-  const { data } = await axios.post(`${url}/api/admin/user/reset-password`, passUser.value, { headers });
+  const { data } = await api.post(`${url}/api/admin/user/reset-password`, passUser.value);
   showToast(data.message);
   modalPassword.value = false;
 };
 
 const cancelarEnvio = async (uuid) => {
   try {
-    const { data } = await axios.post(`${url}/api/admin/whatsapp/cancel-batch`, { usuario: uuid }, { headers });
+    const { data } = await api.post(`${url}/api/admin/whatsapp/cancel-batch`, { usuario: uuid });
     showToast(data.mensaje || data.message);
     cargarSesiones();
   } catch (e) {
@@ -97,7 +94,7 @@ const cancelarEnvio = async (uuid) => {
 const cerrarWhatsapp = async (uuid) => {
   if (!confirm("Cerrar sesion de WhatsApp de este usuario?")) return;
   try {
-    const { data } = await axios.post(`${url}/api/admin/whatsapp/close-session`, { usuario: uuid }, { headers });
+    const { data } = await api.post(`${url}/api/admin/whatsapp/close-session`, { usuario: uuid });
     showToast(data.mensaje || data.message);
     cargarSesiones();
   } catch (e) {
@@ -111,11 +108,16 @@ const showToast = (msg, error = false) => {
 };
 
 const getSesionUsuario = (uuid) => sesiones.value.find((s) => s.userUuid === uuid);
+let intervaloSesiones = null;
 
 onMounted(() => {
   cargarUsuarios();
   cargarSesiones();
-  setInterval(cargarSesiones, 10000);
+  intervaloSesiones = setInterval(cargarSesiones, 10000);
+});
+
+onUnmounted(() => {
+  if (intervaloSesiones) clearInterval(intervaloSesiones);
 });
 </script>
 

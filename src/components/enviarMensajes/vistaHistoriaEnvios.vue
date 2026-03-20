@@ -1,14 +1,15 @@
 <script setup>
 import { ref, nextTick, onMounted, onUnmounted } from "vue";
-import { io } from "socket.io-client";
 import { storeCargarBase } from "@/store/storeCargarBase";
 import { storeHistorial } from "@/store/storeHistorial";
 import { useAutowat } from "@/composables/useAutowat";
+import { useSocket } from "@/composables/useSocket";
 import BarraProgreso from "./BarraProgreso.vue";
 
 const baseCargada = storeCargarBase();
 const historialStore = storeHistorial();
-const { AUTOWAT_URL, token, get } = useAutowat();
+const { get } = useAutowat();
+const { conectar, desconectar, on, off } = useSocket();
 
 const logContainer = ref(null);
 const logs = ref([]);
@@ -27,8 +28,6 @@ const cargarLogs = () => {
     if (data) logs.value = JSON.parse(data);
   } catch (e) {}
 };
-
-let socket = null;
 
 const hora = () => {
   const d = new Date();
@@ -54,75 +53,83 @@ const agregarLog = (tipo, data) => {
   });
 };
 
+const onEnviando = (data) => {
+  agregarLog("enviando", data);
+  countdown.value = 0;
+};
+
+const onEnviado = (data) => {
+  const ultimo = logs.value[logs.value.length - 1];
+  if (ultimo && ultimo.tipo === "enviando" && ultimo.numero === data.numero) {
+    ultimo.tipo = "enviado";
+    ultimo.hora = hora();
+    guardarLogs();
+  } else {
+    agregarLog("enviado", data);
+  }
+  historialStore.enviados = data.enviados;
+  historialStore.sinWhatsapp = data.sinWhatsapp;
+};
+
+const onSinWhatsapp = (data) => {
+  const ultimo = logs.value[logs.value.length - 1];
+  if (ultimo && ultimo.tipo === "enviando" && ultimo.numero === data.numero) {
+    ultimo.tipo = "sin-whatsapp";
+    ultimo.hora = hora();
+    guardarLogs();
+  } else {
+    agregarLog("sin-whatsapp", data);
+  }
+  historialStore.enviados = data.enviados;
+  historialStore.sinWhatsapp = data.sinWhatsapp;
+};
+
+const onError = (data) => {
+  const ultimo = logs.value[logs.value.length - 1];
+  if (ultimo && ultimo.tipo === "enviando" && ultimo.numero === data.numero) {
+    ultimo.tipo = "error";
+    ultimo.hora = hora();
+    ultimo.error = data.error;
+    guardarLogs();
+  } else {
+    agregarLog("error", data);
+  }
+};
+
+const onCountdown = (data) => {
+  countdown.value = data.segundos;
+  historialStore.segundosRestantes = data.segundos;
+  historialStore.tiempo = historialStore.formatearTiempo(data.segundos);
+};
+
+const onInicio = (data) => {
+  logs.value = [];
+  agregarLog("sistema", { nombre: "Envio iniciado", total: data.total, numero: `${data.total} contactos` });
+};
+
+const onFinalizado = (data) => {
+  agregarLog("finalizado", { nombre: "Envio finalizado", numero: `${data.enviados} enviados, ${data.sinWhatsapp} sin WA, ${data.errores} errores` });
+  countdown.value = 0;
+  historialStore.enviando = false;
+};
+
+const onCancelado = (data) => {
+  agregarLog("cancelado", { nombre: "Envio cancelado", numero: `${data.enviados} de ${data.total}` });
+  countdown.value = 0;
+  historialStore.enviando = false;
+};
+
 const conectarSocket = () => {
-  if (socket?.connected) return;
-  socket = io(AUTOWAT_URL, { auth: { token } });
+  conectar();
 
-  socket.on("batch:enviando", (data) => {
-    agregarLog("enviando", data);
-    countdown.value = 0;
-  });
-
-  socket.on("batch:enviado", (data) => {
-    const ultimo = logs.value[logs.value.length - 1];
-    if (ultimo && ultimo.tipo === "enviando" && ultimo.numero === data.numero) {
-      ultimo.tipo = "enviado";
-      ultimo.hora = hora();
-      guardarLogs();
-    } else {
-      agregarLog("enviado", data);
-    }
-    historialStore.enviados = data.enviados;
-    historialStore.sinWhatsapp = data.sinWhatsapp;
-  });
-
-  socket.on("batch:sin-whatsapp", (data) => {
-    const ultimo = logs.value[logs.value.length - 1];
-    if (ultimo && ultimo.tipo === "enviando" && ultimo.numero === data.numero) {
-      ultimo.tipo = "sin-whatsapp";
-      ultimo.hora = hora();
-      guardarLogs();
-    } else {
-      agregarLog("sin-whatsapp", data);
-    }
-    historialStore.enviados = data.enviados;
-    historialStore.sinWhatsapp = data.sinWhatsapp;
-  });
-
-  socket.on("batch:error", (data) => {
-    const ultimo = logs.value[logs.value.length - 1];
-    if (ultimo && ultimo.tipo === "enviando" && ultimo.numero === data.numero) {
-      ultimo.tipo = "error";
-      ultimo.hora = hora();
-      ultimo.error = data.error;
-      guardarLogs();
-    } else {
-      agregarLog("error", data);
-    }
-  });
-
-  socket.on("batch:countdown", (data) => {
-    countdown.value = data.segundos;
-    historialStore.segundosRestantes = data.segundos;
-    historialStore.tiempo = historialStore.formatearTiempo(data.segundos);
-  });
-
-  socket.on("batch:inicio", (data) => {
-    logs.value = [];
-    agregarLog("sistema", { nombre: "Envio iniciado", total: data.total, numero: `${data.total} contactos` });
-  });
-
-  socket.on("batch:finalizado", (data) => {
-    agregarLog("finalizado", { nombre: "Envio finalizado", numero: `${data.enviados} enviados, ${data.sinWhatsapp} sin WA, ${data.errores} errores` });
-    countdown.value = 0;
-    historialStore.enviando = false;
-  });
-
-  socket.on("batch:cancelado", (data) => {
-    agregarLog("cancelado", { nombre: "Envio cancelado", numero: `${data.enviados} de ${data.total}` });
-    countdown.value = 0;
-    historialStore.enviando = false;
-  });
+  on("message:batch:enviando", onEnviando);
+  on("message:batch:enviado", onEnviado);
+  on("message:batch:sin-whatsapp", onSinWhatsapp);
+  on("message:batch:error", onError);
+  on("message:batch:countdown", onCountdown);
+  on("message:batch:inicio", onInicio);
+  on("message:batch:finalizado", onFinalizado);
+  on("message:batch:cancelado", onCancelado);
 };
 
 onMounted(async () => {
@@ -146,7 +153,14 @@ onMounted(async () => {
 });
 
 onUnmounted(() => {
-  if (socket) { socket.disconnect(); socket = null; }
+  off("message:batch:enviando", onEnviando);
+  off("message:batch:enviado", onEnviado);
+  off("message:batch:sin-whatsapp", onSinWhatsapp);
+  off("message:batch:error", onError);
+  off("message:batch:countdown", onCountdown);
+  off("message:batch:inicio", onInicio);
+  off("message:batch:finalizado", onFinalizado);
+  off("message:batch:cancelado", onCancelado);
 });
 </script>
 

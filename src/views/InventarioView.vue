@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from "vue";
-import axios from "axios";
+import api from "@/services/api";
 import { useGetRoutes } from "@/composables/getRoutes";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
@@ -16,7 +16,6 @@ const fileInput = ref(null);
 const modal = ref(false);
 const modalSku = ref(false);
 const fileName = ref("");
-const token = ref(localStorage.getItem("token"));
 
 const abrirModalSku = () => {
   modalSku.value = true;
@@ -50,11 +49,8 @@ async function uploadFiles() {
   formData.append("xlsx_file", fileInput.value.files[0]);
 
   try {
-    const headers = {
-      Authorization: "Bearer " + token.value,
-    };
     cargando.value = true;
-    const { data } = await axios.post(uploadFile, formData, { headers });
+    const { data } = await api.post(uploadFile, formData);
 
     if (data.status === "OK") {
       toast.success(data.message, {
@@ -77,14 +73,10 @@ async function uploadFiles() {
 }
 const exportarEstado = async () => {
   try {
-    const headers = {
-      Authorization: "Bearer " + token.value,
-    };
     exportando.value = true;
 
     // Configurar axios para recibir el archivo como blob
-    const response = await axios.post(exportStatus, null, {
-      headers,
+    const response = await api.post(exportStatus, null, {
       responseType: "blob", // Esto permite recibir el archivo como un blob
     });
 
@@ -129,11 +121,7 @@ const cerrarModalResultado = () => {
 
 const getListScan = async () => {
   try {
-    const headers = {
-      Authorization: "Bearer " + token.value,
-      "Content-Type": "application/json",
-    };
-    const { data } = await axios.get(listProducts, { headers });
+    const { data } = await api.get(listProducts);
     escaneados.value = data;
   } catch (error) {
     console.log(error);
@@ -142,11 +130,7 @@ const getListScan = async () => {
 
 const getList = async () => {
   try {
-    const headers = {
-      Authorization: "Bearer " + token.value,
-      "Content-Type": "application/json",
-    };
-    const { data } = await axios.get(remainingProducts, { headers });
+    const { data } = await api.get(remainingProducts);
     noEscaneados.value = data;
   } catch (error) {
     console.log(error);
@@ -158,14 +142,10 @@ getListScan();
 
 const startScannerNew = async (barcode) => {
   try {
-    const headers = {
-      Authorization: "Bearer " + token.value,
-      "Content-Type": "application/json",
-    };
     const dataPackage = {
       articulo: barcode,
     };
-    const { data } = await axios.put(scanner, dataPackage, { headers });
+    const { data } = await api.put(scanner, dataPackage);
 
     if (data.status === "error") {
       toast.error(data.message, {

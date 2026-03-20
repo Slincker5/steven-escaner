@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from "vue";
-import axios from "axios";
+import api from "@/services/api";
 import { useGetRoutes } from "@/composables/getRoutes";
 import dayjs from "dayjs";
 import "dayjs/locale/es";
@@ -12,17 +12,10 @@ dayjs.extend(relativeTime);
 const { listProducts, remainingProducts } = useGetRoutes();
 const escaneados = ref([]);
 const noEscaneados = ref([]);
-const token = ref(localStorage.getItem("token"));
 
 const getListScan = async () => {
   try {
-    const headers = {
-      Authorization: "Bearer " + token.value,
-      "Content-Type": "application/json",
-    };
-    const { data } = await axios.get(listProducts, {
-      headers,
-    });
+    const { data } = await api.get(listProducts);
     escaneados.value = data;
   } catch (error) {
     console.log(error);
@@ -31,11 +24,7 @@ const getListScan = async () => {
 
 const getList = async () => {
   try {
-    const headers = {
-      Authorization: "Bearer " + token.value,
-      "Content-Type": "application/json",
-    };
-    const { data } = await axios.get(remainingProducts, { headers });
+    const { data } = await api.get(remainingProducts);
     noEscaneados.value = data;
     console.log(data);
   } catch (error) {

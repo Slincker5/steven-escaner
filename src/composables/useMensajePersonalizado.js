@@ -1,5 +1,5 @@
 import { ref } from "vue";
-import axios from "axios";
+import api from "@/services/api";
 import { storeToRefs } from "pinia";
 import { useGetRoutes } from "@/composables/getRoutes";
 import { storeSeleccionarCategoria } from "@/store/storeSeleccionarCategoria";
@@ -10,7 +10,6 @@ const storeCategoria = storeSeleccionarCategoria();
 const { categoriaSeleccionada, categoriaUuid } = storeToRefs(storeCategoria);
 
 const { createMesagge, listMessagge } = useGetRoutes();
-const token = ref(localStorage.getItem("token"));
 
 export const useMensajePersonalizado = () => {
   const sms = ref("");
@@ -40,13 +39,7 @@ export const useMensajePersonalizado = () => {
         return false;
       }
 
-      const headers = {
-        Authorization: "Bearer " + token.value,
-        "Content-Type": "application/json",
-      };
-      const { data } = await axios.post(createMesagge, dataMensaje, {
-        headers,
-      });
+      const { data } = await api.post(createMesagge, dataMensaje);
       toast.success(data.message, {
         theme: "colored",
         autoClose: 1500,

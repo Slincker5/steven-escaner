@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from "vue";
-import axios from "axios";
+import api from "@/services/api";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 import Cargando from "@/components/Cargando.vue";
@@ -16,7 +16,6 @@ const emit = defineEmits([
   "startScannerNew",
 ]);
 
-const token = ref(localStorage.getItem("token"));
 const { scanner } = useGetRoutes();
 const item = ref([]);
 const modalResultado = ref(false);
@@ -34,11 +33,7 @@ const sendSkuManual = async () => {
     const dataPackage = {
       articulo: sku.value,
     };
-    const headers = {
-      Authorization: "Bearer " + token.value,
-      "Content-Type": "application/json",
-    };
-    const { data } = await axios.put(scanner, dataPackage, { headers });
+    const { data } = await api.put(scanner, dataPackage);
 
     if (data.status === "error") {
       toast.error(data.message, {

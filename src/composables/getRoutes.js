@@ -1,7 +1,7 @@
 export const useGetRoutes = () => {
   // Ruta global
   const url = `https://steven.multimarcas.app`;
-  const url_autowat = `https://api.autowat.site`;
+  const url_autowat = `https://whatsapp.autowat.site`;
   //const url = `http://localhost`;
   const userNoPhoto = "https://cintillos-plazamundo.netlify.app/usuario.png";
 
@@ -25,12 +25,12 @@ export const useGetRoutes = () => {
   //rutas de administrador
   const approveUser = `${url}/api/admin/approve-user`;
 
-  //rutas api whatsapp
+  //rutas api whatsapp (autowat-api)
 
-  const getQr = `${url}/api/whatsapp/get-qr`;
-  const logoutWhatsapp = `${url}/api/whatsapp/logout`;
-  const statusLog = `${url}/api/whatsapp/log-status`;
-  const profileInfo = `${url}/api/whatsapp/profile`;
+  const getQr = `${url_autowat}/auth`;
+  const logoutWhatsapp = `${url_autowat}/auth/logout`;
+  const statusLog = `${url_autowat}/auth`;
+  const profileInfo = `${url_autowat}/auth`;
 
   // mensajes personalizados
 

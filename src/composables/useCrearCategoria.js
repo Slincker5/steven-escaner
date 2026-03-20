@@ -1,5 +1,5 @@
 import { ref } from "vue";
-import axios from "axios";
+import api from "@/services/api";
 import { storeMensajePersonalizado } from "@/store/storeMensajePersonalizado";
 import { useSeleccionarCategoria } from "@/composables/useSeleccionarCategoria";
 import { useGetRoutes } from "@/composables/getRoutes";
@@ -9,7 +9,6 @@ import "vue3-toastify/dist/index.css";
 const { listadoCategoria } = useSeleccionarCategoria();
 const mensaje = storeMensajePersonalizado();
 const { createCategory } = useGetRoutes();
-const token = ref(localStorage.getItem("token"));
 
 export const useCrearCategoria = () => {
   const categoria = ref("");
@@ -20,13 +19,7 @@ export const useCrearCategoria = () => {
         titulo: categoria.value,
       };
 
-      const headers = {
-        Authorization: "Bearer " + token.value,
-        "Content-Type": "application/json",
-      };
-      const { data } = await axios.post(createCategory, dataCategory, {
-        headers,
-      });
+      const { data } = await api.post(createCategory, dataCategory);
       if (data.status === "OK") {
         listadoCategoria();
         categoria.value = "";

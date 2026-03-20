@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { useGetRoutes } from "@/composables/getRoutes";
 import { ref } from "vue";
-import axios from "axios";
+import api from "@/services/api";
 
 export const storeEnvioAutomatizado = defineStore("EnvioAutomatizado", () => {
   // Rutas de la API
@@ -9,7 +9,6 @@ export const storeEnvioAutomatizado = defineStore("EnvioAutomatizado", () => {
     useGetRoutes();
 
   // Estado principal
-  const token = ref(localStorage.getItem("token"));
   const categorias = ref([]);
   const plantillas = ref([]);
   const imagen = ref(false);
@@ -58,9 +57,8 @@ export const storeEnvioAutomatizado = defineStore("EnvioAutomatizado", () => {
     formData.append("file", varImagenSeleccionada.value);
 
     try {
-      const res = await axios.post(uploadFileMessage, formData, {
+      const res = await api.post(uploadFileMessage, formData, {
         headers: {
-          Authorization: "Bearer " + token.value,
           "Content-Type": "multipart/form-data",
         },
       });

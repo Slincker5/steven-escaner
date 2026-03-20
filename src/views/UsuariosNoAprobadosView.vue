@@ -1,22 +1,16 @@
 <script setup>
 import { ref } from "vue";
-import axios from "axios";
+import api from "@/services/api";
 import { useGetRoutes } from "@/composables/getRoutes";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 
 const { userList, userNoPhoto, approveUser } = useGetRoutes();
-const token = ref(localStorage.getItem("token"));
 const usuarios = ref([]);
 
 const obtenerUsuarios = async () => {
   try {
-    const headers = {
-      Authorization: "Bearer " + token.value,
-      "Content-Type": "application/json",
-    };
-
-    const { data } = await axios.get(userList, { headers });
+    const { data } = await api.get(userList);
     usuarios.value = data;
     console.log(data);
   } catch (error) {
@@ -28,16 +22,11 @@ obtenerUsuarios();
 
 const btnAprobar = async (usuario) => {
   try {
-    const headers = {
-      Authorization: "Bearer " + token.value,
-      "Content-Type": "application/json",
-    };
-
     let datos = {
       usuario: usuario,
     };
 
-    const { data } = await axios.post(approveUser, datos, { headers });
+    const { data } = await api.post(approveUser, datos);
     if (data.status === "OK") {
       toast.success(data.message, {
         theme: "colored",

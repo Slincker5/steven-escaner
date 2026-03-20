@@ -1,14 +1,11 @@
 <script setup>
 import { ref, onMounted } from "vue";
-import axios from "axios";
+import api from "@/services/api";
 import { useGetRoutes } from "@/composables/getRoutes";
 import { storeEnvioAutomatizado } from "@/store/storeEnvioAutomatizado";
 
 const { listCategory, listMessagge } = useGetRoutes();
 const envioStore = storeEnvioAutomatizado();
-
-const token = ref(localStorage.getItem("token"));
-const headers = { Authorization: "Bearer " + token.value, "Content-Type": "application/json" };
 
 const abierto = ref(false);
 const categorias = ref([]);
@@ -18,7 +15,7 @@ const cargando = ref(false);
 
 const cargarCategorias = async () => {
   try {
-    const { data } = await axios.get(listCategory, { headers });
+    const { data } = await api.get(listCategory);
     categorias.value = Array.isArray(data) ? data : [];
   } catch (e) { console.log(e); }
 };
@@ -27,7 +24,7 @@ const seleccionarCategoria = async (cat) => {
   categoriaActiva.value = cat.uuid;
   cargando.value = true;
   try {
-    const { data } = await axios.post(listMessagge, { categoria: cat.uuid }, { headers });
+    const { data } = await api.post(listMessagge, { categoria: cat.uuid });
     mensajes.value = Array.isArray(data) ? data : [];
   } catch (e) { console.log(e); }
   cargando.value = false;

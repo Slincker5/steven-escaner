@@ -1,17 +1,10 @@
-import axios from "axios";
+import api from "@/services/api";
 
-const AUTOWAT_URL = "http://localhost:3300";
+const AUTOWAT_URL = "https://whatsapp.autowat.site";
 
 export const useAutowat = () => {
-  const token = localStorage.getItem("token");
+  const get = (path) => api.get(`${AUTOWAT_URL}${path}`);
+  const post = (path, data) => api.post(`${AUTOWAT_URL}${path}`, data);
 
-  const headers = {
-    Authorization: `Bearer ${token}`,
-    "Content-Type": "application/json",
-  };
-
-  const get = (path) => axios.get(`${AUTOWAT_URL}${path}`, { headers });
-  const post = (path, data) => axios.post(`${AUTOWAT_URL}${path}`, data, { headers });
-
-  return { AUTOWAT_URL, token, headers, get, post };
+  return { AUTOWAT_URL, get, post };
 };

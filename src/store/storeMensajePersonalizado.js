@@ -1,10 +1,9 @@
 import { defineStore } from "pinia";
 import { ref, onMounted } from "vue";
-import axios from "axios";
+import api from "@/services/api";
 import { useGetRoutes } from "@/composables/getRoutes";
 
 const { createCategory, listCategory } = useGetRoutes();
-const token = ref(localStorage.getItem("token"));
 export const storeMensajePersonalizado = defineStore(
   "MensajePersonalizado",
   () => {
@@ -31,11 +30,7 @@ export const storeMensajePersonalizado = defineStore(
 
     const listaCategoria = async () => {
       try {
-        const headers = {
-          Authorization: "Bearer " + token.value,
-          "Content-Type": "application/json",
-        };
-        const { data } = await axios.get(listCategory, { headers });
+        const { data } = await api.get(listCategory);
         if (data.length > 0) {
           cambiarEstadoCategoria(false);
           editarExistenciaCategoria(true)
