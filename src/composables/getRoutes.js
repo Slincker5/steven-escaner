@@ -1,7 +1,7 @@
 export const useGetRoutes = () => {
   // Ruta global
   const url = `https://steven.multimarcas.app`;
-  const url_autowat = `https://whatsapp.autowat.site`;
+  const url_autowat = `https://auto.autowat.site`;
   //const url = `http://localhost`;
   const userNoPhoto = "https://cintillos-plazamundo.netlify.app/usuario.png";
 

@@ -8,7 +8,7 @@ function conectar() {
   const token = localStorage.getItem("token");
   if (!token || socket) return;
 
-  socket = io("https://whatsapp.autowat.site", {
+  socket = io("https://auto.autowat.site", {
     auth: { token },
   });
 

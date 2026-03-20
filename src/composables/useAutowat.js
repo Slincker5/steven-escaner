@@ -1,6 +1,6 @@
 import api from "@/services/api";
 
-const AUTOWAT_URL = "https://whatsapp.autowat.site";
+const AUTOWAT_URL = "https://auto.autowat.site";
 
 export const useAutowat = () => {
   const get = (path) => api.get(`${AUTOWAT_URL}${path}`);
