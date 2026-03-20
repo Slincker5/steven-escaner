@@ -8,10 +8,10 @@ const baseCargada = storeCargarBase();
 
 // --- Column definitions with data types ---
 const COLUMNS = [
-  { key: "CLIENTE", label: "Cliente", type: "text", width: "w-[120px]", icon: "fa-font" },
-  { key: "NOMBRE", label: "Nombre", type: "text", width: "w-[200px]", icon: "fa-font" },
-  { key: "NUMERO", label: "Número", type: "number", width: "w-[150px]", icon: "fa-hashtag" },
-  { key: "FECHA", label: "Fecha", type: "date", width: "w-[130px]", icon: "fa-calendar" },
+  { key: "CLIENTE", label: "Cliente", type: "text", width: "w-[120px]", icon: "fa-input-text" },
+  { key: "NOMBRE", label: "Nombre", type: "text", width: "w-[200px]", icon: "fa-user" },
+  { key: "NUMERO", label: "Número", type: "number", width: "w-[150px]", icon: "fa-phone" },
+  { key: "FECHA", label: "Fecha", type: "date", width: "w-[130px]", icon: "fa-calendar-days" },
 ];
 const COL_KEYS = COLUMNS.map((c) => c.key);
 const INITIAL_ROWS = 10;
@@ -251,7 +251,7 @@ const handleSubir = async () => {
   <div class="flex flex-col h-full select-none">
     <!-- ===== RIBBON BAR (Excel 365 style) ===== -->
     <div class="bg-[#217346] px-4 py-1.5 flex items-center gap-1">
-      <i class="fa-regular fa-file-spreadsheet text-white/90 text-base mr-2"></i>
+      <i class="fa-duotone fa-solid fa-table-cells-large text-white/90 text-base mr-2"></i>
       <span class="text-white font-semibold text-sm tracking-wide mr-4">Cargar Base</span>
       <div class="h-4 w-px bg-white/30 mx-1"></div>
       <span class="text-white/70 text-xs">{{ filledRows.length }} filas</span>
@@ -265,7 +265,7 @@ const handleSubir = async () => {
         class="toolbar-btn"
         title="Agregar 5 filas"
       >
-        <i class="fa-regular fa-plus text-[11px]"></i>
+        <i class="fa-sharp fa-solid fa-row-plus text-[11px]"></i>
         <span>Insertar</span>
       </button>
 
@@ -279,7 +279,7 @@ const handleSubir = async () => {
         :class="{ 'opacity-40 cursor-not-allowed': selectedRows.size === 0 }"
         title="Eliminar filas seleccionadas"
       >
-        <i class="fa-regular fa-trash text-[11px]"></i>
+        <i class="fa-sharp fa-solid fa-trash-can text-[11px]"></i>
         <span>Eliminar</span>
       </button>
 
@@ -287,7 +287,7 @@ const handleSubir = async () => {
 
       <!-- Clear all -->
       <button @click="clearAll" class="toolbar-btn" title="Limpiar todo">
-        <i class="fa-regular fa-broom text-[11px]"></i>
+        <i class="fa-sharp fa-solid fa-broom-wide text-[11px]"></i>
         <span>Limpiar</span>
       </button>
 
@@ -300,7 +300,7 @@ const handleSubir = async () => {
         class="toolbar-btn text-red-600"
         title="Quitar filtros"
       >
-        <i class="fa-regular fa-filter-slash text-[11px]"></i>
+        <i class="fa-sharp fa-solid fa-filter-circle-xmark text-[11px]"></i>
         <span>Quitar filtros</span>
       </button>
 
@@ -314,7 +314,7 @@ const handleSubir = async () => {
         :disabled="cargando"
         class="flex items-center gap-1.5 bg-[#217346] hover:bg-[#1a5c38] text-white text-xs px-3 py-1.5 rounded-[3px] transition-colors disabled:opacity-50"
       >
-        <i class="fa-regular fa-cloud-arrow-up text-[11px]"></i>
+        <i class="fa-duotone fa-solid fa-cloud-arrow-up text-[11px]"></i>
         <span>Subir base ({{ filledRows.length }})</span>
       </button>
     </div>
@@ -356,7 +356,7 @@ const handleSubir = async () => {
                 <div class="flex items-center gap-1.5 min-w-0">
                   <!-- Data type badge -->
                   <span :class="typeColors[col.type]" class="inline-flex items-center gap-0.5 px-1 py-0 rounded text-[9px] font-medium leading-tight">
-                    <i :class="'fa-regular ' + col.icon" class="text-[8px]"></i>
+                    <i :class="'fa-duotone fa-solid ' + col.icon" class="text-[8px]"></i>
                     {{ col.type === 'text' ? 'ABC' : col.type === 'number' ? '123' : 'Fecha' }}
                   </span>
                   <!-- Column name -->
@@ -370,8 +370,8 @@ const handleSubir = async () => {
                   <!-- Sort indicator -->
                   <i
                     v-if="sortConfig.key === col.key"
-                    :class="sortConfig.dir === 'asc' ? 'fa-arrow-up' : 'fa-arrow-down'"
-                    class="fa-regular text-[9px] text-[#217346]"
+                    :class="sortConfig.dir === 'asc' ? 'fa-sort-up' : 'fa-sort-down'"
+                    class="fa-sharp fa-solid text-[9px] text-[#217346]"
                   ></i>
                 </div>
                 <!-- Filter button -->
@@ -380,7 +380,7 @@ const handleSubir = async () => {
                   class="opacity-0 group-hover:opacity-100 transition-opacity text-gray-500 hover:text-[#217346] p-0.5"
                   :class="{ 'opacity-100 text-[#217346]': filters[col.key] || showFilter === col.key }"
                 >
-                  <i class="fa-regular fa-filter text-[10px]"></i>
+                  <i class="fa-duotone fa-solid fa-filter text-[10px]"></i>
                 </button>
               </div>
 
@@ -433,7 +433,7 @@ const handleSubir = async () => {
               <div class="w-3.5 h-3.5 border border-[#c1c1c1] rounded-sm flex items-center justify-center cursor-pointer"
                 :class="selectedRows.has(row._idx) ? 'bg-[#217346] border-[#217346]' : 'bg-white hover:border-[#217346]'"
               >
-                <i v-if="selectedRows.has(row._idx)" class="fa-regular fa-check text-white text-[8px]"></i>
+                <i v-if="selectedRows.has(row._idx)" class="fa-sharp fa-solid fa-check text-white text-[8px]"></i>
               </div>
             </td>
 
@@ -474,14 +474,14 @@ const handleSubir = async () => {
     <div class="bg-[#217346] text-white text-[11px] px-4 py-1 flex items-center justify-between flex-shrink-0">
       <div class="flex items-center gap-4">
         <span>
-          <i class="fa-regular fa-table-cells mr-1"></i>
+          <i class="fa-duotone fa-solid fa-table-cells mr-1"></i>
           Filas: {{ filledRows.length }}
         </span>
         <span v-if="selectedRows.size > 0" class="text-white/80">
           Seleccionadas: {{ selectedRows.size }}
         </span>
         <span v-if="hasActiveFilters" class="text-yellow-200">
-          <i class="fa-regular fa-filter mr-0.5"></i> Filtro activo
+          <i class="fa-duotone fa-solid fa-filter mr-0.5"></i> Filtro activo
         </span>
       </div>
       <div class="flex items-center gap-3 text-white/70">
@@ -497,10 +497,10 @@ const handleSubir = async () => {
         class="text-gray-500 hover:text-[#217346] p-1 transition-colors"
         title="Agregar filas"
       >
-        <i class="fa-regular fa-plus text-[10px]"></i>
+        <i class="fa-sharp fa-solid fa-plus text-[10px]"></i>
       </button>
       <div class="bg-white border border-[#c1c1c1] border-b-white px-3 py-0.5 text-[11px] text-[#333] font-medium rounded-t-sm cursor-default">
-        Base de clientes
+        <i class="fa-duotone fa-solid fa-file-spreadsheet text-[#217346] text-[10px] mr-1"></i>Base de clientes
       </div>
     </div>
   </div>
