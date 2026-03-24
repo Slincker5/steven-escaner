@@ -50,6 +50,9 @@ export const useGetRoutes = () => {
 
   const uploadFileMessage = `${url}/api/files/upload`;
 
+  // reportes autowat
+  const batchReport = (id) => `${url_autowat}/message/batch-report/${id}`;
+
   return {
     url,
     userNoPhoto,
@@ -73,5 +76,6 @@ export const useGetRoutes = () => {
     listCategory,
     listMessaggePersonalized,
     uploadFileMessage,
+    batchReport,
   };
 };

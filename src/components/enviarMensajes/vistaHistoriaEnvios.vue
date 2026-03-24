@@ -4,12 +4,18 @@ import { storeCargarBase } from "@/store/storeCargarBase";
 import { storeHistorial } from "@/store/storeHistorial";
 import { useAutowat } from "@/composables/useAutowat";
 import { useSocket } from "@/composables/useSocket";
+import { useGetRoutes } from "@/composables/getRoutes";
+import * as XLSX from "xlsx";
 import BarraProgreso from "./BarraProgreso.vue";
 
 const baseCargada = storeCargarBase();
 const historialStore = storeHistorial();
 const { get } = useAutowat();
 const { conectar, desconectar, on, off } = useSocket();
+const { batchReport } = useGetRoutes();
+
+const ultimoBatchId = ref(null);
+const descargando = ref(false);
 
 const logContainer = ref(null);
 const logs = ref([]);
@@ -111,6 +117,28 @@ const onFinalizado = (data) => {
   agregarLog("finalizado", { nombre: "Envio finalizado", numero: `${data.enviados} enviados, ${data.sinWhatsapp} sin WA, ${data.errores} errores` });
   countdown.value = 0;
   historialStore.enviando = false;
+  if (data.batchId) ultimoBatchId.value = data.batchId;
+};
+
+const descargarReporte = async () => {
+  if (!ultimoBatchId.value || descargando.value) return;
+  descargando.value = true;
+  try {
+    const { data } = await get(batchReport(ultimoBatchId.value));
+    if (!data.numeros || data.numeros.length === 0) {
+      agregarLog("sistema", { nombre: "Sin numeros para reportar", numero: "" });
+      return;
+    }
+    const rows = data.numeros.map((n, i) => ({ "#": i + 1, Numero: n.numero, Nombre: n.nombre }));
+    const ws = XLSX.utils.json_to_sheet(rows);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Sin WhatsApp");
+    XLSX.writeFile(wb, `sin-whatsapp-${ultimoBatchId.value}.xlsx`);
+  } catch (e) {
+    agregarLog("error", { nombre: "Error descargando reporte", error: e.message });
+  } finally {
+    descargando.value = false;
+  }
 };
 
 const onCancelado = (data) => {
@@ -235,6 +263,19 @@ onUnmounted(() => {
               <span v-else-if="log.tipo === 'enviando'" class="text-gray-500 ml-1">enviando...</span>
             </template>
           </div>
+        </div>
+
+        <!-- Boton descargar reporte -->
+        <div v-if="ultimoBatchId && !historialStore.enviando" class="flex items-center gap-2 py-2 mt-1">
+          <span class="text-gray-600 w-[50px]"></span>
+          <button
+            @click="descargarReporte"
+            :disabled="descargando"
+            class="flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-mono bg-gray-800 hover:bg-gray-700 text-gray-300 rounded border border-gray-700 transition-colors disabled:opacity-50"
+          >
+            <i :class="descargando ? 'fa-duotone fa-regular fa-spinner-third fa-spin' : 'fa-duotone fa-regular fa-file-excel'" class="text-[9px]"></i>
+            {{ descargando ? 'Descargando...' : 'Descargar sin WhatsApp' }}
+          </button>
         </div>
 
         <!-- Countdown -->
