@@ -51,7 +51,7 @@ export const useGetRoutes = () => {
   const uploadFileMessage = `${url}/api/files/upload`;
 
   // reportes autowat
-  const batchReport = (id) => `${url_autowat}/message/batch-report/${id}`;
+  const batchReport = (id) => `/message/batch-report/${id}`;
 
   return {
     url,
